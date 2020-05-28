@@ -1,8 +1,8 @@
 import time
-from motorController import motorController
+from MotorControllerUSB import motorControllerUSB
 
 power = 100
-x = motorController()
+x = motorControllerUSB()
 
 
 x.turnRight(90, power)
