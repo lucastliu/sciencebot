@@ -1,0 +1,7 @@
+*.DS_STORE
+*.pyc
+*.idea
+*.vscode
+motorController.py
+test.py
+Navigation/motorController.py

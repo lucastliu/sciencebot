@@ -1,13 +1,13 @@
 import math
 from DWMTag import DWMTag
-from eTaxiBase import eTaxiBase
+from BaseBot import BaseBot
 from imu_integrated_movement import args, getYaw
 from MotorControllerUSB import MotorControllerUSB
 import threading
 import time
 
 
-class eTaxi_Dima(eTaxiBase):
+class DWMBot(BaseBot):
     # Error Vars
     MAX_POS_ERROR = 4.5
 

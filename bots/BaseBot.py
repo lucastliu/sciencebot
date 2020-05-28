@@ -2,7 +2,7 @@ from abc import abstractmethod, ABC
 import math
 
 
-class eTaxiBase(ABC):
+class BaseBot(ABC):
 
     @abstractmethod
     def get_position(self):

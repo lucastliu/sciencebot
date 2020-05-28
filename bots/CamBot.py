@@ -1,5 +1,5 @@
 import math
-from eTaxiBase import eTaxiBase
+from BaseBot import BaseBot
 from motorController import motorController
 import threading
 import time
@@ -7,7 +7,7 @@ import time
 from H7Camera import H7Camera
 
 
-class eTaxi_Lucas(eTaxiBase):
+class CamBot(BaseBot):
     # Error Vars
     MAX_POS_ERROR = 10
     MAX_IMU_ERROR_DEG = 0.05
