@@ -1,5 +1,8 @@
 import pyb, time
 import sensor, image, time, math, ustruct
+from camera_constants import *
+
+# Startup sequence
 
 led = pyb.LED(3)
 led2 = pyb.LED(2)
@@ -23,6 +26,7 @@ sensor.skip_frames(time = 2000)     # Wait for settings take effect.
 sensor.set_auto_gain(False)  # must turn this off to prevent image washout...
 sensor.set_auto_whitebal(False)  # must turn this off to prevent image washout...
 clock = time.clock()
+
 # Note! Unlike find_qrcodes the find_apriltags method does not need lens correction on the image to work.
 
 # What's the difference between tag families? Well, for example, the TAG16H5 family is effectively
@@ -46,21 +50,23 @@ clock = time.clock()
 # c_x is the image x center position in pixels.
 # c_y is the image y center position in pixels.
 
-f_x = (16 / 3.984) * 160 # find_apriltags defaults to 2.8, not 16 if this if not set
-f_y = (16 / 2.952) * 120 # find_apriltags defaults to 2.8 not 16 if this if not set
-c_x = 160 * 0.5 # find_apriltags defaults to this if not set (the image.w * 0.5)
-c_y = 120 * 0.5 # find_apriltags defaults to this if not set (the image.h * 0.5)
+f_x = (LENS_FOCAL_LENGTH / 3.984) * 160 # find_apriltags defaults to 2.8
+f_y = (LENS_FOCAL_LENGTH / 2.952) * 120 # find_apriltags defaults to 2.8
+c_x = 160 * 0.5 # (the image.w * 0.5)
+c_y = 120 * 0.5 # (the image.h * 0.5)
 
 
 def near(x, base=10):
     return base * round(x/base)
 
+
 def x_cm(x):
-    return (-.9887*x - .046)
+    return (X_SCALE * x + X_OFFSET)
 
 
 def z_cm(x):
-    return (-.7912*x - 3.0865)
+    return (Z_SCALE * x + Z_OFFSET)
+
 
 def find_tag():
     tags = 0
@@ -69,6 +75,7 @@ def find_tag():
     for tag in img.find_apriltags(families=image.TAG16H5, fx=f_x, fy=f_y, cx=c_x, cy=c_y): # defaults to TAG36H11
         tags = tags + 1
     return tags
+
 
 def collect_data():
     z = []
@@ -87,10 +94,12 @@ def collect_data():
 
     return x, z
 
+
 def trust(x, z):
     if (x[-1] - x[0]) < 1:
         return 1
     return 0
+
 
 while(True):
     cmd = usb.recv(4, timeout=5000)
@@ -146,6 +155,3 @@ while(True):
         led2.on()
         time.sleep(150)
         led2.off()
-
-
-

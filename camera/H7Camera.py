@@ -68,7 +68,7 @@ class H7Camera():
         self.test = self.cam_mand("test")
 
     def update_thread_test(self):
-        self.thread_test += 1 #only this works, arithmetic. nested function fails
+        self.thread_test += 1 
         
     def update(self):
         if self.update_tag_present():
