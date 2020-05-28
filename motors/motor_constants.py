@@ -1,0 +1,3 @@
+MOVE = .5
+TURN = .18
+OFFSET = .15
