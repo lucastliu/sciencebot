@@ -3,7 +3,7 @@ import time
 import SerialMotor as S
 from motor_constants import *
 
-sm = S.SerialMotor("/dev/ttyUSB0")
+sm = S.SerialMotor("/dev/ttyACM1")
 
 
 class MotorControllerUSB:

@@ -5,7 +5,7 @@ from subprocess import check_output
 from statistics import mean
 import time 
 
-args = "/home/pi/IMU/pi-bno055/getbno055"
+args = "/home/pi/pi-bno055/getbno055"
 
 
 def getYaw(pathToIMU):
@@ -85,9 +85,12 @@ def go(allPoints, angle):
         # validateAngle(angle)
     return allDist
 
-while True:
+
+x = 0
+while x  < 10:
     print(getYaw(args))
     time.sleep(1)
+    x += 1
 
 # # Step 0
 # initialDir = getYaw(args)
