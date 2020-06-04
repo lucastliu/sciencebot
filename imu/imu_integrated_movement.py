@@ -3,6 +3,7 @@ import math
 from math import atan
 from subprocess import check_output
 from statistics import mean
+import time 
 
 args = "/home/pi/IMU/pi-bno055/getbno055"
 
@@ -83,6 +84,10 @@ def go(allPoints, angle):
         # Forward(dist)
         # validateAngle(angle)
     return allDist
+
+while True:
+    print(getYaw(args))
+    time.sleep(1)
 
 # # Step 0
 # initialDir = getYaw(args)

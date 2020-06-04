@@ -1,7 +1,7 @@
 import math
 from DWMTag import DWMTag
 from BaseBot import BaseBot
-from imu_integrated_movement import args, getYaw
+from imu.imu_integrated_movement import args, getYaw
 from MotorControllerUSB import MotorControllerUSB
 import threading
 import time
