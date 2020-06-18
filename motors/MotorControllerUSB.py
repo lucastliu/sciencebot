@@ -1,9 +1,9 @@
 import RPi.GPIO as GPIO
 import time
-import SerialMotor as S
+from SerialMotor import SerialMotor
 from motor_constants import *
 
-sm = S.SerialMotor("/dev/ttyACM1")
+sm = SerialMotor("/dev/ttyACM0")
 
 
 class MotorControllerUSB:

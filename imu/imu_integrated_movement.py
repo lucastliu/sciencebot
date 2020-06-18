@@ -85,9 +85,9 @@ def go(allPoints, angle):
         # validateAngle(angle)
     return allDist
 
-
+# 
 x = 0
-while x  < 10:
+while x  < 7:
     print(getYaw(args))
     time.sleep(1)
     x += 1

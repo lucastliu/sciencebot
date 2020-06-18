@@ -7,7 +7,7 @@ import time
 
 
 class H7Camera():
-    def __init__(self, port_name="/dev/ttyACM0"):
+    def __init__(self, port_name="/dev/ttyACM1"):
         #Exact port name may vary
         self.port_name = port_name
         
@@ -33,7 +33,7 @@ class H7Camera():
             print("Serial went wrong")
             return -1
 
-    def get_photo(self):
+    def get_photo(self, name="img.jpg"):
         serialcmd="snap"
         sp = serial.Serial(self.port_name, baudrate=115200, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE,
                 xonxoff=False, rtscts=False, stopbits=serial.STOPBITS_ONE, timeout=None, dsrdtr=True)
@@ -44,7 +44,7 @@ class H7Camera():
         img = sp.read(size)
         sp.close()
         
-        with open("img.jpg", "wb") as f:
+        with open(name, "wb") as f:
             f.write(img)
 
 
@@ -105,7 +105,8 @@ class H7Camera():
         return self.thread_test
 
 
-# v = H7Camera(port_name="/dev/ttyACM0")
+# v = H7Camera(port_name="/dev/ttyACM1")
+# v.get_photo()
 # print(v.get_tag_present())
 # print(v.get_x_offset())
 # while(True):

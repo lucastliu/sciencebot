@@ -19,10 +19,11 @@ class DWMTag():
         while is_not_available:
             line=self.DWM.readline()
             if(line):
+                print(line)
                 if len(line)>=5:
                     parse=line.decode().split(",")
                     try:
-                        pos_ind = parse.index("POS")
+                        pos_ind = parse.index("POS") #POS
                         if pos_ind is not None:
                             is_not_available = False
                     except Exception as ex:
