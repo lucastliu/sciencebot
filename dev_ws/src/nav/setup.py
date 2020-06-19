@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'mover = nav.mover:main',
+            'imu = nav.imu.imu:main'
         ],
     },
 )

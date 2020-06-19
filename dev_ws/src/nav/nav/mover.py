@@ -39,7 +39,7 @@ class Mover(Node):
     def listener_callback(self, msg):
         self.get_logger().info('Teleop Command  Linear: %.2f Angular: %.2f' % (msg.linear.x, msg.angular.z)) # CHANGE
         if msg.linear.x:
-            self.mc.move(msg.linear.x)
+            self.mc.move(msg.linear.x*.5)
         if msg.angular.z:
             self.mc.turn(msg.angular.z * 10)
 
