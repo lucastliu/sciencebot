@@ -18,43 +18,51 @@ from std_msgs.msg import String
 from geometry_msgs.msg import Twist
 
 import time
-from nav.MotorControllerUSB import MotorControllerUSB
+
+import RPi.GPIO as GPIO
+import time
+from nav.SerialMotor import SerialMotor
+from nav.motor_constants import *
 
 
-class Mover(Node):
+
+
+class Motors(Node):
 
     def __init__(self):
-        super().__init__('mover')
+        super().__init__('motors')
         self.subscription = self.create_subscription(
             Twist,
-            'key_vel',
+            'cmd_vel',
             self.listener_callback,
             10)
         self.subscription  # prevent unused variable warning
         
-        power = 80
-        self.mc = MotorControllerUSB()
-        self.mc.setSpeed(power)
+        #change this to directly affect LR motors
+        #          setWheelVelocity((int) ((received.linear + received.rotation) * 100), (int) ((received.linear - received.rotation) * 100));
+        
+        self.sm = SerialMotor("/dev/ttyACM1")
 
-    def listener_callback(self, msg):
-        self.get_logger().info('Teleop Command  Linear: %.2f Angular: %.2f' % (msg.linear.x, msg.angular.z)) # CHANGE
-        if msg.linear.x:
-            self.mc.move(msg.linear.x*.5)
-        if msg.angular.z:
-            self.mc.turn(msg.angular.z * 10)
+    def listener_callback(self, twist):
+        self.get_logger().info('Teleop Command  Linear: %.2f Angular: %.2f' % (twist.linear.x, twist.angular.z)) # CHANGE
 
-
+        if twist.linear.x and twist.angular.z:
+            self.sm.set_motor(3,(twist.linear.x + twist.angular.z)/2)
+            self.sm.set_motor(4,(twist.linear.x - twist.angular.z)/2)
+        else:
+            self.sm.set_motor(3,(twist.linear.x + twist.angular.z))
+            self.sm.set_motor(4,(twist.linear.x - twist.angular.z))
 def main(args=None):
     rclpy.init(args=args)
 
-    mover = Mover()
+    motors = Motors()
 
-    rclpy.spin(mover)
+    rclpy.spin(motors)
 
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically
     # when the garbage collector destroys the node object)
-    mover.destroy_node()
+    motors.destroy_node()
     rclpy.shutdown()
 
 

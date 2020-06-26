@@ -1,0 +1,5 @@
+int32 turns
+---
+int32 turns_done
+---
+int32 turns_completed

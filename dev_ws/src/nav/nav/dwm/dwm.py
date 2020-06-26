@@ -14,7 +14,7 @@ class DWM(Node):
         timer_period = 1.0 # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.i = 0
-        self.tag = DWMTag(port_name="/dev/ttyACM1")
+        self.tag = DWMTag(port_name="/dev/ttyACM0")
 
     def timer_callback(self):
         self.tag.update_position()
