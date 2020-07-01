@@ -19,13 +19,11 @@ from geometry_msgs.msg import Twist
 import time
 
 
-
 class Mux(Node):
 
     def __init__(self):
         super().__init__('mux')
 
-        
         self.autonomous = self.create_subscription(
             Twist,
             'auto_vel',
@@ -41,14 +39,14 @@ class Mux(Node):
         self.manual  # prevent unused variable warning
         self.block_duration = 0
         self.manual_time = time.time()
-        
+
         self.publisher = self.create_publisher(Twist, 'cmd_vel', 10)     # CHANGE
-        
+
     def manual_callback(self, twist):
         self.manual_time = time.time()
         self.block_duration = 5
         self.publisher.publish(twist)
-        
+
     def autonomous_callback(self, twist):
         time_since_manual_cmd = time.time() - self.manual_time
         if time_since_manual_cmd >= self.block_duration:

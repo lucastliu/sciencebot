@@ -2,25 +2,25 @@ import time
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
-from tutorial_interfaces.msg import Num    # CHANGE
+from turtlesim.msg import Pose
 
 from nav.imu.imu_integrated_movement import *
+
 
 class IMU(Node):
 
     def __init__(self):
         super().__init__('imu')
-        self.publisher_ = self.create_publisher(String, 'heading', 10)     # CHANGE
-        timer_period = 1.0 # seconds
+        self.publisher_ = self.create_publisher(Pose, 'heading', 10)     # CHANGE
+        timer_period = 1.0  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.i = 0
 
     def timer_callback(self):
-        msg = String()
-        msg.data = str(getYaw("/home/pi/pi-bno055/getbno055"))                                         # CHANGE          
+        msg = Pose()
+        msg.theta = getYaw("/home/pi/pi-bno055/getbno055")
         self.publisher_.publish(msg)
-        self.get_logger().info('Heading: "%s"' % msg.data)  # CHANGE 
-        self.i += 1
+        self.get_logger().info('Heading: "%s"' % msg.theta)
 
 
 def main(args=None):
