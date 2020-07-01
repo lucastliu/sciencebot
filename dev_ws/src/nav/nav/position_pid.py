@@ -10,8 +10,6 @@ from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
 from nav import pid.PID
 
-# TODO: add pose input, positional information
-
 
 class PositionPID(Node):
 
@@ -23,7 +21,7 @@ class PositionPID(Node):
             MoveTo,
             'move_to',
             self.move_to_callback)
-        
+
         self.subscription = self.create_subscription(
             Pose,
             'pose',
