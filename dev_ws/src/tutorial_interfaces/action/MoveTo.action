@@ -1,0 +1,8 @@
+float64 x_dest
+float64 y_dest
+---
+float64 x_curr
+float64 y_curr
+---
+float64 x_final
+float64 y_final
