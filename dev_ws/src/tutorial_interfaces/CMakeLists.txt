@@ -27,6 +27,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/AddThreeInts.srv"
   "action/Fibonacci.action"
   "action/Turn.action"
+  "action/MoveTo.action"
  )
 
 if(BUILD_TESTING)

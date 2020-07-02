@@ -19,10 +19,10 @@ class PID:
 
         self.error_prev = 0.0
 
-        if time_prev is None:
-            self.time_prev = time.time()
+        if time_ref is None:
+            self.time_ref = time.time()
         else:
-            self.time_prev = time_prev
+            self.time_ref = time_ref
 
     def update(self, error, time_curr=None):
 
@@ -40,7 +40,7 @@ class PID:
         self.cd = de/dt
 
         # update values
-        self.time_prev = time_curr
+        self.time_ref = time_curr
         self.error_prev = error
 
         return (

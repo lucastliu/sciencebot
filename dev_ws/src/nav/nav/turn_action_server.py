@@ -29,10 +29,10 @@ class TurnActionServer(Node):
 
         for i in range(0, goal_handle.request.turns):
             twist = Twist()
-            twist.linear.x = 0.75
+            twist.linear.x = 1.0
             twist.angular.z = -0.75
             self.publisher.publish(twist)
-            time.sleep(0.5)
+            time.sleep(2)
             twist = Twist()
             twist.linear.x = 0.0
             twist.angular.z = 0.0

@@ -8,7 +8,7 @@ from rclpy.node import Node
 from tutorial_interfaces.action import MoveTo
 from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
-from nav import pid.PID
+from nav.pid import PID
 
 
 class PositionPID(Node):

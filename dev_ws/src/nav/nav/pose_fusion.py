@@ -12,12 +12,12 @@ class PoseFusion(Node):
 
         self.pose = Pose()
         
-        self.2dpose = self.create_subscription(
+        self.xy = self.create_subscription(
             Pose,
             'xy',
             self.xy_callback,
             10)
-        self.2dpose  # prevent unused variable warning
+        self.xy  # prevent unused variable warning
 
         self.heading = self.create_subscription(
             Pose,

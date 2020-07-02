@@ -47,11 +47,11 @@ class Motors(Node):
         self.get_logger().info('Teleop Command  Linear: %.2f Angular: %.2f' % (twist.linear.x, twist.angular.z)) # CHANGE
 
         if twist.linear.x and twist.angular.z:
-            self.sm.set_motor(3,(twist.linear.x + twist.angular.z)/2)
-            self.sm.set_motor(4,(twist.linear.x - twist.angular.z)/2)
+            self.sm.set_motor(3,(-1*twist.linear.x + twist.angular.z)/2)
+            self.sm.set_motor(4,(-1*twist.linear.x - twist.angular.z)/2)
         else:
-            self.sm.set_motor(3,(twist.linear.x + twist.angular.z))
-            self.sm.set_motor(4,(twist.linear.x - twist.angular.z))
+            self.sm.set_motor(3,(-1*twist.linear.x + twist.angular.z))
+            self.sm.set_motor(4,(-1*twist.linear.x - twist.angular.z))
 def main(args=None):
     rclpy.init(args=args)
 

@@ -28,7 +28,9 @@ setup(
             'motors = nav.motors:main',
             'imu = nav.imu.imu:main',
             'dwm = nav.dwm.dwm:main',
-            'mux = nav.mux:main'
+            'mux = nav.mux:main',
+            'posefusion = nav.pose_fusion:main',
+            'pid = nav.position_pid:main'
         ],
     },
 )

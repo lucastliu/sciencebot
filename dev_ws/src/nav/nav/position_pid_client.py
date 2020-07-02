@@ -15,7 +15,6 @@ class PositionPIDClient(Node):
         goal_msg = MoveTo.Goal()
         goal_msg.x_dest = x_dest
         goal_msg.y_dest = y_dest
-
         self._action_client.wait_for_server()
 
         self._send_goal_future = self._action_client.send_goal_async(
@@ -46,7 +45,7 @@ class PositionPIDClient(Node):
     def feedback_callback(self, feedback_msg):
         feedback = feedback_msg.feedback
         self.get_logger().info('Feedback: {0},  {1}'
-                               .format(result.x_curr, result.y_curr))
+                               .format(feedback.x_curr, feedback.y_curr))
 
 
 def main(args=None):
@@ -54,7 +53,7 @@ def main(args=None):
 
     action_client = PositionPIDClient()
 
-    action_client.send_goal(1.8, 1.8)
+    action_client.send_goal(1.8, 1.4)
 
     rclpy.spin(action_client)
 
