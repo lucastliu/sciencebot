@@ -44,14 +44,21 @@ class Motors(Node):
         self.sm = SerialMotor("/dev/ttyACM1")
 
     def listener_callback(self, twist):
-        self.get_logger().info('Teleop Command  Linear: %.2f Angular: %.2f' % (twist.linear.x, twist.angular.z)) # CHANGE
+        self.get_logger().info('Twist  Linear: %.2f Angular: %.2f' % (twist.linear.x, twist.angular.z)) # CHANGE
+        WHEEL_BASE = .15  # distance between wheels, meters
+        RADIUS = .035  # wheel radius, meters
+        right_vel = (-1 * twist.linear.x + twist.angular.z * WHEEL_BASE / 2.0) / RADIUS  #right
+        left_vel = (-1 * twist.linear.x - twist.angular.z * WHEEL_BASE / 2.0) / RADIUS   # left
+        self.get_logger().info('Velocity  Right: %.3f Left: %.3f' % (right_vel, left_vel)) # CHANGE
 
-        if twist.linear.x and twist.angular.z:
-            self.sm.set_motor(3,(-1*twist.linear.x + twist.angular.z)/2)
-            self.sm.set_motor(4,(-1*twist.linear.x - twist.angular.z)/2)
-        else:
-            self.sm.set_motor(3,(-1*twist.linear.x + twist.angular.z))
-            self.sm.set_motor(4,(-1*twist.linear.x - twist.angular.z))
+        #  convert desired velocity to wheel power, -1 to 1
+        #  hard cap top and bottom ranges
+        #  only one formula for now
+        right_power = .9
+        left_power = .9
+        self.sm.set_motor(3, right_power)  #right
+        self.sm.set_motor(4, left_power)  # left
+        
 def main(args=None):
     rclpy.init(args=args)
 

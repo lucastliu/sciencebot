@@ -3,18 +3,21 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     return LaunchDescription([
+#         Node(
+#             package='nav',
+#             node_executable='imu',
+#             output="screen"
+#         ),
         Node(
             package='nav',
-            node_executable='imu',
-            output="screen"
+            node_executable='mux'
         ),
         Node(
             package='nav',
-            node_executable='mover'
+            node_executable='posefusion'
         ),
 #         Node(
-#             package='key_teleop',
-#             node_executable='key_teleop',
-#             node_name='keyx',
-#         )
+#             package='nav',
+#             node_executable='motors'
+#         ),
     ])
