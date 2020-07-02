@@ -1,7 +1,7 @@
 import serial
 
 class SerialMotor:
-    def __init__(self, port, baud=9600):
+    def __init__(self, port, baud=11520):
         """Opens a serial port connection with the specified port."""
         self.port = serial.Serial(port, baud)
 
