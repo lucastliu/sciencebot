@@ -37,6 +37,7 @@ class Motors(Node):
             self.get_logger().info('Exceeded maximum wheel power')
         if abs(power) < .5:
             self.get_logger().info('Low wheel power')
+            power = .5
         if neg:
             power = -1 * power
             
@@ -56,7 +57,9 @@ class Motors(Node):
         
         right_power = convert_velocity_to_power(right_vel)
         left_power = convert_velocity_to_power(left_vel)
-        self.sm.set_motor(3, right_power)  #right
+        self.get_logger().info('Power Right: %.3f Left: %.3f' % (right_power, left_power)) # CHANGE
+
+        self.sm.set_motor(3, right_power)  # right
         self.sm.set_motor(4, left_power)  # left
         
 

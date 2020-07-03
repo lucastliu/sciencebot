@@ -31,8 +31,8 @@ class PositionPID(Node):
 
         self.publisher = self.create_publisher(Twist, 'auto_vel', 10)
 
-        self.angle_pid = PID()
-        self.distance_pid = PID()
+        self.angle_pid = PID(kp=1.2, ki=0, kd=0)
+        self.distance_pid = PID(kp=1.2, ki=0, kd=0)
 
         self.x_dest = 0.0
         self.y_dest = 0.0
@@ -44,7 +44,7 @@ class PositionPID(Node):
         self.twist = Twist()
 
     def pose_callback(self, pose):
-        self.get_logger().info('Pose: %s' % (pose))  # CHANGE
+        #  self.get_logger().info('Pose: %s' % (pose))  # CHANGE
         self.x = pose.x
         self.y = pose.y
         self.angle = pose.theta

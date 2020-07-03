@@ -24,7 +24,7 @@ void setPower(int port, float power) {
 }
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(11520);
   Serial.setTimeout(20);
 }
 

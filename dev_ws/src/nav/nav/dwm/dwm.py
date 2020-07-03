@@ -26,7 +26,11 @@ class DWM(Node):
         msg.y = position[1]
 
         self.publisher_.publish(msg)
-        self.get_logger().info('Beacons: "%s"' % msg)  # CHANGE 
+        self.i += 1
+
+        if self.i > 10:
+            self.i = 0
+            self.get_logger().info('Beacons: "%s"' % msg)  # CHANGE 
 
 
 def main(args=None):
