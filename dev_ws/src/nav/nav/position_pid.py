@@ -91,6 +91,12 @@ class PositionPID(Node):
         result = MoveTo.Result()
         result.x_final = self.x
         result.y_final = self.y
+        
+        #stop motors
+        self.twist.linear.x = 0.0
+        self.twist.angular.z = 0.0
+        self.publisher.publish(self.twist)
+
         return result
 
     def get_distance(self):
@@ -100,8 +106,8 @@ class PositionPID(Node):
             )
 
     def get_angle(self):
-        r_x = self.r * math.cos(self.angle)
-        r_y = self.r * math.sin(self.angle)
+        r_x = self.r * math.cos(math.radians(self.angle))
+        r_y = self.r * math.sin(math.radians(self.angle))
 
         xim = self.x + r_x
         yim = self.y + r_y
