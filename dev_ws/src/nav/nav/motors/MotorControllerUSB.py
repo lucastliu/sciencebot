@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 import time
-from nav.SerialMotor import SerialMotor
-from nav.motor_constants import *
+from nav.motors.SerialMotor import SerialMotor
+from nav.motors.motor_constants import *
 
 sm = SerialMotor("/dev/ttyACM1")
 

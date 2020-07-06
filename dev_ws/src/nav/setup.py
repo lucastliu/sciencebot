@@ -25,7 +25,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'motors = nav.motors:main',
+            'motors = nav.motors.motors:main',
             'imu = nav.imu.imu:main',
             'dwm = nav.dwm.dwm:main',
             'mux = nav.mux:main',
