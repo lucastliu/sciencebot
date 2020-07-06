@@ -28,13 +28,16 @@ class PoseFusion(Node):
 
         self.publisher = self.create_publisher(Pose, 'pose', 10)     # CHANGE
         
+    def service_callback(self, request, response):
+        return self.pose
+        
     def xy_callback(self, data):
         self.pose.x = data.x
         self.pose.y = data.y
         self.publisher.publish(self.pose)
         
     def heading_callback(self, data):
-        self.pose.theta = data.theta
+        self.pose.theta = data.theta  
         self.publisher.publish(self.pose)
 
 

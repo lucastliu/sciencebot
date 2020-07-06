@@ -4,6 +4,8 @@ import time
 import rclpy
 from rclpy.action import ActionServer
 from rclpy.node import Node
+from rclpy.callback_groups import ReentrantCallbackGroup
+from rclpy.executors import MultiThreadedExecutor
 
 from tutorial_interfaces.action import MoveTo
 from geometry_msgs.msg import Twist
@@ -15,21 +17,25 @@ class PositionPID(Node):
 
     def __init__(self):
         super().__init__('position_pid')
+        
+        self.group = ReentrantCallbackGroup()
 
         self._action_server = ActionServer(
-            self,
-            MoveTo,
-            'move_to',
-            self.move_to_callback)
+            node=self,
+            action_type=MoveTo,
+            action_name='move_to',
+            execute_callback=self.move_to_callback,
+            callback_group=self.group)
 
         self.subscription = self.create_subscription(
-            Pose,
-            'pose',
-            self.pose_callback,
-            10)
-        self.subscription  # prevent unused variable warning
+            msg_type=Pose,
+            topic='pose',
+            callback=self.pose_callback,
+            qos_profile=10,
+            callback_group=self.group)
 
         self.publisher = self.create_publisher(Twist, 'auto_vel', 10)
+        
 
         self.angle_pid = PID(kp=1.2, ki=0, kd=0)
         self.distance_pid = PID(kp=1.2, ki=0, kd=0)
@@ -44,7 +50,7 @@ class PositionPID(Node):
         self.twist = Twist()
 
     def pose_callback(self, pose):
-        #  self.get_logger().info('Pose: %s' % (pose))  # CHANGE
+        #self.get_logger().info('Pose: %s' % (pose))  # CHANGE
         self.x = pose.x
         self.y = pose.y
         self.angle = pose.theta
@@ -59,7 +65,7 @@ class PositionPID(Node):
         # return final position
         feedback_msg = MoveTo.Feedback()
 
-        while self.r > 0.1:
+        while self.r > 0.2:
 
             # calculate
             self.linear_correction()
@@ -72,9 +78,13 @@ class PositionPID(Node):
             feedback_msg.x_curr = self.x
             feedback_msg.y_curr = self.y
             goal_handle.publish_feedback(feedback_msg)
+            #print(feedback_msg)
 
             # update while condition
             self.r = self.get_distance()
+            
+            # yield thread
+            time.sleep(0.0)
 
         goal_handle.succeed()
 
@@ -127,11 +137,22 @@ class PositionPID(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-
-    server = PositionPID()
-
-    rclpy.spin(server)
-
+    
+    try:
+        server = PositionPID()
+        executor = MultiThreadedExecutor()
+        executor.add_node(server)
+    
+        try:
+            executor.spin()
+            
+        finally:
+            executor.shutdown()
+            server.destroy_node()
+    
+    finally:
+        rclpy.shutdown()
+        
 
 if __name__ == '__main__':
     main()

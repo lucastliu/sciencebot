@@ -22,10 +22,12 @@ class IMU(Node):
         # User these lines for UART
         # uart = busio.UART(board.TX, board.RX)
         # sensor = adafruit_bno055.BNO055_UART(uart)
-        while not self.sensor.calibrated:
-            self.get_logger().info('IMU not calibrated')
-            self.get_logger().info(str(self.sensor.calibration_status))
-            time.sleep(1)
+        
+        # TEMP REMOVE CALIBRATION
+        #while not self.sensor.calibrated:
+         #   self.get_logger().info('IMU not calibrated')
+          #  self.get_logger().info(str(self.sensor.calibration_status))
+           # time.sleep(1)
         
         self.get_logger().info('Success: IMU Calibration ')
         time.sleep(1)

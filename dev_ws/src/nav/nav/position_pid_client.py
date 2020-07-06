@@ -38,13 +38,13 @@ class PositionPIDClient(Node):
 
     def get_result_callback(self, future):
         result = future.result().result
-        self.get_logger().info('Final Positon: {0},  {1}'
+        self.get_logger().info('Final Positon: %.3f,  %.3f'
                                .format(result.x_final, result.y_final))
         rclpy.shutdown()
 
     def feedback_callback(self, feedback_msg):
         feedback = feedback_msg.feedback
-        self.get_logger().info('Feedback: {0},  {1}'
+        self.get_logger().info('Feedback: %.3f,  %.3f'
                                .format(feedback.x_curr, feedback.y_curr))
 
 
