@@ -4,21 +4,21 @@ from launch_ros.actions import Node
 def generate_launch_description():
     return LaunchDescription([
         Node(
+             package='nav',
+             node_executable='imu',
+             output="screen",
+             emulate_tty=True
+         ),
+        Node(
             package='nav',
-            node_executable='mux',
+            node_executable='dwm',
             output="screen",
             emulate_tty=True
         ),
         Node(
             package='nav',
-            node_executable='pid',
+            node_executable='posefusion',
             output="screen",
             emulate_tty=True
-        ),
-         Node(
-             package='nav',
-             node_executable='motors',
-             output="screen",
-             emulate_tty=True
-         ),
+        )
     ])

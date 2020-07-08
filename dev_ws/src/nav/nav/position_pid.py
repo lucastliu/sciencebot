@@ -37,8 +37,8 @@ class PositionPID(Node):
         self.publisher = self.create_publisher(Twist, 'auto_vel', 10)
         
 
-        self.angle_pid = PID(kp=1.2, ki=0, kd=0)
-        self.distance_pid = PID(kp=1.2, ki=0, kd=0)
+        self.angle_pid = PID(kp=.01, ki=0.001, kd=0)  #TODO: rescale and tune PID constants
+        self.distance_pid = PID(kp=.01, ki=0.001, kd=0)
 
         self.x_dest = 0.0
         self.y_dest = 0.0
@@ -48,7 +48,8 @@ class PositionPID(Node):
         self.r = 999.99
 
         self.twist = Twist()
-
+        
+        self.get_logger().info('PID Node Live')
     def pose_callback(self, pose):
         #self.get_logger().info('Pose: %s' % (pose))  # CHANGE
         self.x = pose.x
@@ -82,9 +83,6 @@ class PositionPID(Node):
 
             # update while condition
             self.r = self.get_distance()
-            
-            # yield thread
-            time.sleep(0.0)
 
         goal_handle.succeed()
 
@@ -130,7 +128,6 @@ class PositionPID(Node):
 
         return alpha
 
-# may need trigger stops in these 2 methods 
     def linear_correction(self):
         pid_dist = self.distance_pid.update(self.r)
         self.twist.linear.x = pid_dist

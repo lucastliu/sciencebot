@@ -40,7 +40,9 @@ class Mux(Node):
         self.block_duration = 0
         self.manual_time = time.time()
 
-        self.publisher = self.create_publisher(Twist, 'cmd_vel', 10)     # CHANGE
+        self.publisher = self.create_publisher(Twist, 'cmd_vel', 10)
+        self.get_logger().info('Mux Node Live')
+
 
     def manual_callback(self, twist):
         self.manual_time = time.time()
@@ -52,6 +54,8 @@ class Mux(Node):
         if time_since_manual_cmd >= self.block_duration:
             self.block_duration = 0 # stop blocking
             self.publisher.publish(twist)
+            #self.get_logger().info('Twist  Linear: %.2f Angular: %.2f' % (twist.linear.x, twist.angular.z)) # CHANGE
+
 
 
 def main(args=None):

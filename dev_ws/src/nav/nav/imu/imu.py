@@ -56,7 +56,7 @@ class IMU(Node):
         self.i += 1
         if self.i > 10:
             self.i = 0
-            self.get_logger().info('IMU Pose: "%s"' % msg)
+            #self.get_logger().info('IMU Pose: "%s"' % msg)
         
     def position_update(self):
         x = self.sensor.linear_acceleration[0]

@@ -23,6 +23,8 @@ class Motors(Node):
         self.subscription  # prevent unused variable warning
         
         self.sm = SerialMotor("/dev/ttyACM0")
+        self.get_logger().info('Motors Node Live')
+
         
     def convert_velocity_to_power(self, vel):
         if vel == 0:
@@ -47,12 +49,12 @@ class Motors(Node):
         return power
     
     def listener_callback(self, twist):
-        self.get_logger().info('Twist  Linear: %.2f Angular: %.2f' % (twist.linear.x, twist.angular.z)) # CHANGE
+        self.get_logger().info('Twist  Linear: %.6f Angular: %.6f' % (twist.linear.x, twist.angular.z)) # CHANGE
         WHEEL_BASE = .15  # distance between wheels, meters
         RADIUS = .035  # wheel radius, meters
         right_vel = (-1 * twist.linear.x + twist.angular.z * WHEEL_BASE / 2.0) / RADIUS  #right
         left_vel = (-1 * twist.linear.x - twist.angular.z * WHEEL_BASE / 2.0) / RADIUS   # left
-        self.get_logger().info('Velocity  Right: %.3f Left: %.3f' % (right_vel, left_vel)) # CHANGE
+        self.get_logger().info('Velocity  Right: %.6f Left: %.6f' % (right_vel, left_vel)) # CHANGE
 
         #  convert desired velocity to wheel power, -1 to 1
         

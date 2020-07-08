@@ -16,7 +16,8 @@ class DWM(Node):
         timer_period = 0.1  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.i = 0
-        self.tag = DWMTag(port_name="/dev/ttyACM0")
+        self.tag = DWMTag(port_name="/dev/ttyACM1")
+        self.get_logger().info('DWM Node Live')
 
     def timer_callback(self):
         self.tag.update_position()
@@ -30,7 +31,7 @@ class DWM(Node):
 
         if self.i > 10:
             self.i = 0
-            self.get_logger().info('Beacons: "%s"' % msg)  # CHANGE 
+            #self.get_logger().info('Beacons: "%s"' % msg)  # CHANGE 
 
 
 def main(args=None):
