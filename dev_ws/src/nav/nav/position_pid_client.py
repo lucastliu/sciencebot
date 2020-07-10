@@ -38,7 +38,7 @@ class PositionPIDClient(Node):
 
     def get_result_callback(self, future):
         result = future.result().result
-        self.get_logger().info('Final Position: {%.3f},  {%.3f}'
+        self.get_logger().info('Final Position: {0},  {1}'
                                .format(result.x_final, result.y_final))
         rclpy.shutdown()
 
@@ -53,7 +53,7 @@ def main(args=None):
 
     action_client = PositionPIDClient()
 
-    action_client.send_goal(1.8, 1.4)
+    action_client.send_goal(3.0,4.0)
 
     rclpy.spin(action_client)
 

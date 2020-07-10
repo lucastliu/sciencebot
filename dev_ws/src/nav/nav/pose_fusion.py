@@ -26,7 +26,7 @@ class PoseFusion(Node):
             10)
         self.heading  # prevent unused variable warning
 
-        self.publisher = self.create_publisher(Pose, 'pose', 10)
+        self.publisher = self.create_publisher(Pose, 'pose', 4)
         self.i = 0
         self.get_logger().info('Pose Fusion Node Live')
 
@@ -35,10 +35,12 @@ class PoseFusion(Node):
         self.pose.x = data.x
         self.pose.y = data.y
         self.publisher.publish(self.pose)
+        self.log_pose()
         
     def heading_callback(self, data):
         self.pose.theta = data.theta  
         self.publisher.publish(self.pose)
+        self.log_pose()
         
     def log_pose(self):
         self.i += 1

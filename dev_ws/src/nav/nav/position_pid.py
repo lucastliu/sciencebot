@@ -31,21 +31,21 @@ class PositionPID(Node):
             msg_type=Pose,
             topic='pose',
             callback=self.pose_callback,
-            qos_profile=10,
+            qos_profile=4,
             callback_group=self.group)
 
-        self.publisher = self.create_publisher(Twist, 'auto_vel', 10)
+        self.publisher = self.create_publisher(Twist, 'auto_vel', 1)
         
 
-        self.angle_pid = PID(kp=.01, ki=0.001, kd=0)  #TODO: rescale and tune PID constants
-        self.distance_pid = PID(kp=.01, ki=0.001, kd=0)
+
 
         self.x_dest = 0.0
         self.y_dest = 0.0
         self.x = 0.0
         self.y = 0.0
         self.angle = 0.0
-        self.r = 999.99
+        self.r = 1.0
+        self.angle_diff = 10
 
         self.twist = Twist()
         
@@ -54,22 +54,27 @@ class PositionPID(Node):
         #self.get_logger().info('Pose: %s' % (pose))  # CHANGE
         self.x = pose.x
         self.y = pose.y
-        self.angle = pose.theta
+        self.angle = math.radians(pose.theta)
 
     def move_to_callback(self, goal_handle):
         self.get_logger().info('Executing Move To...')
+        self.angle_pid = PID(kp=6.0, ki=0.0, kd=0)  #TODO: rescale and tune PID constants
+        self.distance_pid = PID(kp=.006, ki=0.0003, kd=0)
         self.x_dest = goal_handle.request.x_dest
         self.y_dest = goal_handle.request.y_dest
         self.r = self.get_distance()
+        self.get_logger().info('Start r: {0}'.format(self.r))
 
         # return x,y during each cycle
         # return final position
         feedback_msg = MoveTo.Feedback()
 
-        while self.r > 0.2:
+        while self.r > 0.4:
 
             # calculate
             self.linear_correction()
+            
+
             self.angular_correction()
 
             # publish velocity updates
@@ -84,16 +89,21 @@ class PositionPID(Node):
             # update while condition
             self.r = self.get_distance()
 
+        #stop motors
+        self.twist.linear.x = 0.0
+        self.twist.angular.z = 0.0
+        self.publisher.publish(self.twist)
+        
         goal_handle.succeed()
 
         result = MoveTo.Result()
         result.x_final = self.x
         result.y_final = self.y
         
-        #stop motors
-        self.twist.linear.x = 0.0
-        self.twist.angular.z = 0.0
-        self.publisher.publish(self.twist)
+
+        
+        self.get_logger().info('Finish Move To')
+
 
         return result
 
@@ -103,39 +113,18 @@ class PositionPID(Node):
             + math.pow(self.y_dest - self.y, 2)
             )
 
-    def get_angle(self):
-        r_x = self.r * math.cos(math.radians(self.angle))
-        r_y = self.r * math.sin(math.radians(self.angle))
-
-        xim = self.x + r_x
-        yim = self.y + r_y
-
-        c = math.sqrt(
-            math.pow(self.x_dest - xim, 2)
-            + math.pow(self.y_dest - yim, 2)
-            )
-
-        if xim > self.x_dest:
-            alpha = math.acos(
-                (2 * math.pow(self.r, 2) - math.pow(c, 2))
-                / (2 * math.pow(self.r, 2))
-                )
-        else:
-            alpha = 2 * math.pi * math.acos(
-                (2*math.pow(self.r, 2)
-                 - math.pow(c, 2)) / (2 * math.pow(self.r, 2))
-                )
-
-        return alpha
-
     def linear_correction(self):
         pid_dist = self.distance_pid.update(self.r)
+        #self.get_logger().info('PID r: {0}'.format(pid_dist))
         self.twist.linear.x = pid_dist
 
     def angular_correction(self):
-        angle = self.get_angle()
-        pid_angle = self.angle_pid.update(angle)
+        self.angle_diff = self.steering_angle() - self.angle
+        pid_angle = self.angle_pid.update(self.angle_diff)
         self.twist.angular.z = pid_angle
+        
+    def steering_angle(self):
+        return math.atan2(self.y_dest - self.y, self.x_dest - self.x)
 
 
 def main(args=None):

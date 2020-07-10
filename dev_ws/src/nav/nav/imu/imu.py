@@ -33,7 +33,7 @@ class IMU(Node):
         time.sleep(1)
         
         self.publisher_ = self.create_publisher(Pose, 'heading', 10)     # CHANGE
-        timer_period = .1  # seconds
+        timer_period = .05  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
 
         self.pos_pub = self.create_publisher(Pose, 'imu_position', 10)     # CHANGE

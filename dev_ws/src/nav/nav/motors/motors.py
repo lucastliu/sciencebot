@@ -19,7 +19,7 @@ class Motors(Node):
             Twist,
             'cmd_vel',
             self.listener_callback,
-            10)
+            1)
         self.subscription  # prevent unused variable warning
         
         self.sm = SerialMotor("/dev/ttyACM0")
@@ -37,12 +37,12 @@ class Motors(Node):
         
         power = 1.3375 * vel - 0.5473
         
-        if abs(power) > 1:
-            power = 1.0
+        if power > .6:
+            power = .6
             self.get_logger().info('Exceeded maximum wheel power')
-        if abs(power) < .5 and abs(power) > .1:
+        if power <= 0:
             self.get_logger().info('Low wheel power')
-            power = 0.5
+            power = 0.3
         if neg:
             power = -1 * power
             

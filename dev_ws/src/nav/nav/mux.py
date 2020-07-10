@@ -28,19 +28,19 @@ class Mux(Node):
             Twist,
             'auto_vel',
             self.autonomous_callback,
-            10)
+            1)
         self.autonomous  # prevent unused variable warning
 
         self.manual = self.create_subscription(
             Twist,
             'key_vel',
             self.manual_callback,
-            10)
+            1)
         self.manual  # prevent unused variable warning
         self.block_duration = 0
         self.manual_time = time.time()
 
-        self.publisher = self.create_publisher(Twist, 'cmd_vel', 10)
+        self.publisher = self.create_publisher(Twist, 'cmd_vel', 1)
         self.get_logger().info('Mux Node Live')
 
 
