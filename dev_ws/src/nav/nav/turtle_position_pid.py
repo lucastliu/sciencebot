@@ -7,7 +7,7 @@ from rclpy.node import Node
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.executors import MultiThreadedExecutor
 
-from tutorial_interfaces.action import MoveTo
+from tutorial_interfaces.action import MoveTo, Tune
 from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
 from nav.pid import PID
@@ -22,7 +22,7 @@ class PositionPID(Node):
 
         self._action_server = ActionServer(
             node=self,
-            action_type=MoveTo,
+            action_type=Tune, #MoveTo,
             action_name='move_to',
             execute_callback=self.move_to_callback,
             callback_group=self.group)
@@ -49,7 +49,7 @@ class PositionPID(Node):
 
         self.twist = Twist()
         
-        self.get_logger().info('Turtle PID Node Live')
+        self.get_logger().info('Turtle PID Control Live')
     def pose_callback(self, pose):
         #self.get_logger().info('Pose: %s' % (pose))  # CHANGE
         self.x = pose.x
@@ -58,8 +58,10 @@ class PositionPID(Node):
 
     def move_to_callback(self, goal_handle):
         self.get_logger().info('Executing Move To...')
-        self.angle_pid = PID(kp=6.0, ki=0.0, kd=0.0)  #TODO: rescale and tune PID constants
-        self.distance_pid = PID(kp=1.5, ki=0.0, kd=0.0)
+        L = goal_handle.request.linear
+        A = goal_handle.request.angular
+        self.angle_pid = PID(kp=A[0], ki=A[1], kd=A[2])  # 6 0 0
+        self.distance_pid = PID(kp=L[0], ki=L[1], kd=L[2])  # 1.5 0 0
         self.x_dest = goal_handle.request.x_dest
         self.y_dest = goal_handle.request.y_dest
         self.r = self.get_distance()
@@ -68,7 +70,7 @@ class PositionPID(Node):
 
         # return x,y during each cycle
         # return final position
-        feedback_msg = MoveTo.Feedback()
+        feedback_msg = Tune.Feedback()
 
         while self.r > 0.1:
 
@@ -97,7 +99,7 @@ class PositionPID(Node):
         
         goal_handle.succeed()
 
-        result = MoveTo.Result()
+        result = Tune.Result()
         result.x_final = self.x
         result.y_final = self.y
         

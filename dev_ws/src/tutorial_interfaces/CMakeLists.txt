@@ -28,6 +28,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "action/Fibonacci.action"
   "action/Turn.action"
   "action/MoveTo.action"
+  "action/Tune.action"
  )
 
 if(BUILD_TESTING)
