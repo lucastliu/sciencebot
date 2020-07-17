@@ -22,7 +22,7 @@ class Motors(Node):
             1)
         self.subscription  # prevent unused variable warning
         
-        self.sm = SerialMotor("/dev/ttyACM0")
+        self.sm = SerialMotor("/dev/ttyACM1")
         self.get_logger().info('Motors Node Live')
 
         
@@ -37,12 +37,12 @@ class Motors(Node):
         
         power = 1.3375 * vel - 0.5473
         
-        if power > .6:
-            power = .6
+        if power > .9:
+            power = .9
             self.get_logger().info('Exceeded maximum wheel power')
-        if power <= 0:
+        if power <= .4:
             self.get_logger().info('Low wheel power')
-            power = 0.3
+            power = 0.4
         if neg:
             power = -1 * power
             

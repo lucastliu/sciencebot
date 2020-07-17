@@ -4,7 +4,7 @@ import time
 import rclpy
 from rclpy.action import ActionServer
 from rclpy.node import Node
-from rclpy.callback_groups import ReentrantCallbackGroup
+from rclpy.callback_groups import ReentrantCallbackGroup, MutuallyExclusiveCallbackGroup
 from rclpy.executors import MultiThreadedExecutor
 
 from tutorial_interfaces.action import MoveTo, Tune
@@ -18,7 +18,7 @@ class PositionPID(Node):
     def __init__(self):
         super().__init__('position_pid')
         
-        self.group = ReentrantCallbackGroup()
+        self.group = MutuallyExclusiveCallbackGroup()
 
         self._action_server = ActionServer(
             node=self,
@@ -54,7 +54,11 @@ class PositionPID(Node):
         #self.get_logger().info('Pose: %s' % (pose))  # CHANGE
         self.x = pose.x
         self.y = pose.y
-        self.angle = pose.theta
+        #self.angle = pose.theta
+        if pose.theta >= 0:
+            self.angle = pose.theta
+        else:
+            self.angle = 2*math.pi + pose.theta
 
     def move_to_callback(self, goal_handle):
         self.get_logger().info('Executing Move To...')
@@ -78,7 +82,9 @@ class PositionPID(Node):
             self.linear_correction()
             
             #if self.angle_diff > .01:
-            self.anglex() #self.angular_correction()
+            
+            #self.angular_correction()
+            self.anglex()
 
             # publish velocity updates
             self.publisher.publish(self.twist)
@@ -140,6 +146,20 @@ class PositionPID(Node):
                 )
 
         return alpha
+        
+    def get_anglex(self):
+        val = math.atan2(self.y_dest - self.y, self.x_dest - self.x)
+        
+        if self.x_dest > self.x:
+            if self.y_dest > self.y:
+                return val
+            else:
+                return 2*math.pi + val
+        else:
+            if self.y_dest > self.y:
+                return val
+            else:
+                return 2*math.pi + val
 
     def linear_correction(self):
         pid_dist = self.distance_pid.update(self.r)
@@ -152,11 +172,13 @@ class PositionPID(Node):
         self.twist.angular.z = pid_angle
         
     def anglex(self):
-        self.angle_diff = self.steering_angle() - self.angle
+        #self.angle_diff = self.steering_angle() - self.angle
+        self.angle_diff = self.get_anglex() - self.angle
         pid_angle = self.angle_pid.update(self.angle_diff)
         self.twist.angular.z = pid_angle
         
     def steering_angle(self):
+        # need to carefully consider this
         return math.atan2(self.y_dest - self.y, self.x_dest - self.x)
         
 
