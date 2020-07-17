@@ -54,11 +54,11 @@ class PositionPID(Node):
         #self.get_logger().info('Pose: %s' % (pose))  # CHANGE
         self.x = pose.x
         self.y = pose.y
-        #self.angle = pose.theta
-        if pose.theta >= 0:
-            self.angle = pose.theta
-        else:
-            self.angle = 2*math.pi + pose.theta
+        self.angle = pose.theta
+        #if pose.theta >= 0:
+         #   self.angle = pose.theta
+        #else:
+         #   self.angle = 2*math.pi + pose.theta
 
     def move_to_callback(self, goal_handle):
         self.get_logger().info('Executing Move To...')
@@ -172,8 +172,15 @@ class PositionPID(Node):
         self.twist.angular.z = pid_angle
         
     def anglex(self):
-        #self.angle_diff = self.steering_angle() - self.angle
-        self.angle_diff = self.get_anglex() - self.angle
+        self.angle_diff = self.steering_angle() - self.angle
+        
+        if self.angle_diff > math.pi:
+            self.angle_diff = self.angle_diff - 2*math.pi
+
+        if self.angle_diff < -1*math.pi:
+            self.angle_diff = self.angle_diff + 2*math.pi
+            
+        #self.angle_diff = self.get_anglex() - self.angle
         pid_angle = self.angle_pid.update(self.angle_diff)
         self.twist.angular.z = pid_angle
         

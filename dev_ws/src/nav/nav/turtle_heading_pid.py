@@ -47,10 +47,11 @@ class PositionPID(Node):
         #self.get_logger().info('Pose: %s' % (pose))  # CHANGE
         self.x = pose.x
         self.y = pose.y
-        if pose.theta >= 0:
-            self.angle = pose.theta
-        else:
-            self.angle = 2*math.pi + pose.theta
+        self.angle = pose.theta
+        #if pose.theta >= 0:
+         #   self.angle = pose.theta
+        #else:
+         #   self.angle = 2*math.pi + pose.theta
 
     def move_to_callback(self, goal_handle):
         self.get_logger().info('Executing Turn...')
