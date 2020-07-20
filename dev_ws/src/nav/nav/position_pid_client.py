@@ -2,7 +2,7 @@ import rclpy
 from rclpy.node import Node
 
 from rclpy.action import ActionClient
-from tutorial_interfaces.action import MoveTo, Tune
+from custom_interfaces.action import MoveTo, Tune
 
 
 class PositionPIDClient(Node):

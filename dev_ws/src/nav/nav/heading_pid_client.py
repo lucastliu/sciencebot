@@ -2,7 +2,7 @@ import rclpy
 from rclpy.node import Node
 
 from rclpy.action import ActionClient
-from tutorial_interfaces.action import Heading
+from custom_interfaces.action import Heading
 
 
 class PositionPIDClient(Node):

@@ -2,7 +2,7 @@ import time
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
-from tutorial_interfaces.msg import Num
+from custom_interfaces.msg import Num
 
 from nav.dwm.DWMTag import DWMTag
 from turtlesim.msg import Pose
@@ -16,7 +16,7 @@ class DWM(Node):
         timer_period = 0.05  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.i = 0
-        self.tag = DWMTag(port_name="/dev/ttyACM1")
+        self.tag = DWMTag(port_name="/dev/ttyACM0")
         self.get_logger().info('DWM Node Live')
 
     def timer_callback(self):

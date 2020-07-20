@@ -4,7 +4,7 @@ import rclpy
 from rclpy.action import ActionServer
 from rclpy.node import Node
 
-from tutorial_interfaces.action import Turn
+from custom_interfaces.action import Turn
 from geometry_msgs.msg import Twist
 
 

@@ -7,7 +7,7 @@ from rclpy.node import Node
 from rclpy.callback_groups import ReentrantCallbackGroup, MutuallyExclusiveCallbackGroup
 from rclpy.executors import MultiThreadedExecutor
 
-from tutorial_interfaces.action import MoveTo, Tune
+from custom_interfaces.action import MoveTo, Tune
 from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
 from nav.pid import PID
