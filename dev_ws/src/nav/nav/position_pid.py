@@ -124,7 +124,7 @@ class PositionPID(Node):
         self.twist.linear.x = pid_dist
 
     def angular_correction(self):
-        self.angle_diff = self.steering_angle() - self.angle
+        self.angle_diff = self.angle - self.steering_angle()
         
         if self.angle_diff > math.pi:
             self.angle_diff = self.angle_diff - 2*math.pi

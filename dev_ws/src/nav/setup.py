@@ -31,7 +31,9 @@ setup(
             'mux = nav.mux:main',
             'posefusion = nav.pose_fusion:main',
             'pid = nav.position_pid:main',
-            'turtlepid = nav.turtle_position_pid:main'
+            'turtlepid = nav.turtle_position_pid:main',
+            'imupid = nav.imu_pid:main',
+            'turtleturn = nav.turtle_heading_pid:main'
         ],
     },
 )

@@ -55,14 +55,15 @@ class PositionPID(Node):
         if self.angle > math.pi:
             self.angle = self.angle - 2*math.pi
             
-        print("theta: {0} angle: {1}".format(pose.theta, self.angle))
+        #print("theta: {0} angle: {1}".format(pose.theta, self.angle))
 
     def move_to_callback(self, goal_handle):
         self.get_logger().info('Executing Turn...')
         A = goal_handle.request.angular
-        self.angle_pid = PID(kp=A[0], ki=A[1], kd=A[2], imax=.3)  # .05 .0008 0     .7 m/s movement
+        self.angle_pid = PID(kp=A[0], ki=A[1], kd=A[2], imax=.3)  # .1 .005 0     .7 m/s movement
         self.dest_angle = math.radians(goal_handle.request.dest_angle)
-        print('DEST: {0}'.format(self.dest_angle))
+        if self.dest_angle > math.pi:
+            self.dest_angle = self.dest_angle - 2*math.pi
 
         # return x,y during each cycle
         # return final position
@@ -101,7 +102,7 @@ class PositionPID(Node):
         return result
 
     def angular_correction(self):
-        self.angle_diff = self.dest_angle - self.angle
+        self.angle_diff = self.angle - self.dest_angle
         
         if self.angle_diff > math.pi:
             self.angle_diff = self.angle_diff - 2*math.pi
