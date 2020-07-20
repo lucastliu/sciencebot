@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(tutorial_interfaces)
+project(custom_interfaces)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -29,6 +29,8 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "action/Turn.action"
   "action/MoveTo.action"
   "action/Tune.action"
+  "action/Heading.action"
+  "msg/Cpid.msg"
  )
 
 if(BUILD_TESTING)
