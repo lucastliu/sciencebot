@@ -10,21 +10,26 @@ import time
 from nav.motors.SerialMotor import SerialMotor
 from nav.motors.motor_constants import *
 
+from rclpy.qos import qos_profile_sensor_data, QoSProfile
+
 
 class Motors(Node):
 
     def __init__(self):
         super().__init__('motors')
+        
+        p = qos_profile_sensor_data
+        p.depth = 1
+        
         self.subscription = self.create_subscription(
             Twist,
             'cmd_vel',
             self.listener_callback,
-            1)
+            p)
         self.subscription  # prevent unused variable warning
         
         self.sm = SerialMotor("/dev/ttyACM1")
         self.get_logger().info('Motors Node Live')
-
         
     def convert_velocity_to_power(self, vel):
         if vel == 0:
@@ -37,12 +42,12 @@ class Motors(Node):
         
         power = 1.3375 * vel - 0.5473
         
-        if power > .9:
-            power = .9
+        if power > .8:
+            power = .8
             self.get_logger().info('Exceeded maximum wheel power')
         if power <= .4:
             self.get_logger().info('Low wheel power')
-            power = 0.4
+            power = .4
         if neg:
             power = -1 * power
             
@@ -52,8 +57,8 @@ class Motors(Node):
         self.get_logger().info('Twist  Linear: %.6f Angular: %.6f' % (twist.linear.x, twist.angular.z)) # CHANGE
         WHEEL_BASE = .15  # distance between wheels, meters
         RADIUS = .035  # wheel radius, meters
-        right_vel = (-1 * twist.linear.x + twist.angular.z * WHEEL_BASE / 2.0) / RADIUS  #right
-        left_vel = (-1 * twist.linear.x - twist.angular.z * WHEEL_BASE / 2.0) / RADIUS   # left
+        right_vel = (-1 * twist.linear.x - twist.angular.z * WHEEL_BASE / 2.0) / RADIUS  #right
+        left_vel = (-1 * twist.linear.x + twist.angular.z * WHEEL_BASE / 2.0) / RADIUS   # left
         self.get_logger().info('Velocity  Right: %.6f Left: %.6f' % (right_vel, left_vel)) # CHANGE
 
         #  convert desired velocity to wheel power, -1 to 1

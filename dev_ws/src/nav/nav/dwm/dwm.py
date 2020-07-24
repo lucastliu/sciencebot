@@ -7,12 +7,13 @@ from custom_interfaces.msg import Num
 from nav.dwm.DWMTag import DWMTag
 from turtlesim.msg import Pose
 
+from rclpy.qos import qos_profile_sensor_data
 
 class DWM(Node):
 
     def __init__(self):
         super().__init__('dwm')
-        self.publisher_ = self.create_publisher(Pose, 'xy', 10)
+        self.publisher_ = self.create_publisher(Pose, 'xy', qos_profile_sensor_data)
         timer_period = 0.05  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.i = 0

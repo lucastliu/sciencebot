@@ -18,6 +18,7 @@ from geometry_msgs.msg import Twist
 
 import time
 
+from rclpy.qos import qos_profile_sensor_data
 
 class Mux(Node):
 
@@ -28,19 +29,21 @@ class Mux(Node):
             Twist,
             'auto_vel',
             self.autonomous_callback,
-            1)
+            qos_profile_sensor_data)
         self.autonomous  # prevent unused variable warning
 
         self.manual = self.create_subscription(
             Twist,
             'key_vel',
             self.manual_callback,
-            1)
+            qos_profile_sensor_data)
         self.manual  # prevent unused variable warning
         self.block_duration = 0
         self.manual_time = time.time()
-
-        self.publisher = self.create_publisher(Twist, 'cmd_vel', 1)
+        
+        p = qos_profile_sensor_data
+        p.depth = 1
+        self.publisher = self.create_publisher(Twist, 'cmd_vel', p)
         self.get_logger().info('Mux Node Live')
 
 

@@ -9,6 +9,7 @@ import board
 import busio
 import adafruit_bno055
 
+from rclpy.qos import qos_profile_sensor_data
 
 class IMU(Node):
 
@@ -32,11 +33,11 @@ class IMU(Node):
         self.get_logger().info('Success: IMU Calibration ')
         time.sleep(1)
         
-        self.publisher_ = self.create_publisher(Pose, 'heading', 10)     # CHANGE
-        timer_period = .02  # seconds
+        self.publisher_ = self.create_publisher(Pose, 'heading', qos_profile_sensor_data)     # CHANGE
+        timer_period = .05  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
 
-        self.pos_pub = self.create_publisher(Pose, 'imu_position', 10)     # CHANGE
+        #self.pos_pub = self.create_publisher(Pose, 'imu_position', 10)     # CHANGE
 
 
         self.x = 0.0

@@ -12,8 +12,6 @@ from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
 from nav.pid import PID
 
-from rclpy.qos import qos_profile_sensor_data
-
 
 class PositionPID(Node):
 
@@ -33,12 +31,10 @@ class PositionPID(Node):
             msg_type=Pose,
             topic='pose',
             callback=self.pose_callback,
-            qos_profile=qos_profile_sensor_data,
+            qos_profile=4,
             callback_group=self.group)
 
-        p = qos_profile_sensor_data
-        p.depth = 1
-        self.publisher = self.create_publisher(Twist, 'auto_vel', p)
+        self.publisher = self.create_publisher(Twist, 'auto_vel', 1)
         
 
 
@@ -58,14 +54,10 @@ class PositionPID(Node):
         #self.get_logger().info('Pose: %s' % (pose))  # CHANGE
         self.x = pose.x
         self.y = pose.y
-        temp = math.radians(pose.theta % 360.0) #carefully consider trig options
+        self.angle = math.radians(pose.theta % 360.0) #carefully consider trig options
         
-        if temp < math.pi:
-            temp = -1*temp
-        else:
-            temp = 2*math.pi - temp
-            
-        self.angle = temp
+        if self.angle > math.pi:
+            self.angle = self.angle - 2*math.pi
 
     def move_to_callback(self, goal_handle):
         self.get_logger().info('Executing Move To...')
@@ -81,32 +73,37 @@ class PositionPID(Node):
         # return x,y during each cycle
         # return final position
         feedback_msg = Tune.Feedback()
+        
+        stable = False
 
-        while self.r > 0.4:
+        while not stable:
+            while self.r > 0.3:
 
-            # calculate
-            self.linear_correction()
-            
+                # calculate
+                self.linear_correction()
+                
 
-            self.angular_correction()
+                self.angular_correction()
 
-            # publish velocity updates
+                # publish velocity updates
+                self.publisher.publish(self.twist)
+                
+                # give feedback
+                feedback_msg.x_curr = self.x
+                feedback_msg.y_curr = self.y
+                goal_handle.publish_feedback(feedback_msg)
+                #print(feedback_msg)
+
+                # update while condition
+                self.r = self.get_distance()
+
+            #stop motors
+            self.twist.linear.x = 0.0
+            self.twist.angular.z = 0.0
             self.publisher.publish(self.twist)
-            
-            # give feedback
-            feedback_msg.x_curr = self.x
-            feedback_msg.y_curr = self.y
-            goal_handle.publish_feedback(feedback_msg)
-            #print(feedback_msg)
-
-            # update while condition
             self.r = self.get_distance()
-
-        #stop motors
-        self.twist.linear.x = 0.0
-        self.twist.angular.z = 0.0
-        self.publisher.publish(self.twist)
-
+            if self.r < 0.3:
+                stable = True
         
         goal_handle.succeed()
 
@@ -133,7 +130,7 @@ class PositionPID(Node):
         self.twist.linear.x = pid_dist
 
     def angular_correction(self):
-        self.angle_diff = self.angle - self.steering_angle()
+        self.angle_diff = self.steering_angle() - self.angle
         
         if self.angle_diff > math.pi:
             self.angle_diff = self.angle_diff - 2*math.pi

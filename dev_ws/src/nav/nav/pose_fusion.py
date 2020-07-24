@@ -3,7 +3,7 @@ from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
 import time
-
+from rclpy.qos import qos_profile_sensor_data
 
 class PoseFusion(Node):
 
@@ -16,17 +16,17 @@ class PoseFusion(Node):
             Pose,
             'xy',
             self.xy_callback,
-            10)
+            qos_profile_sensor_data)
         self.xy  # prevent unused variable warning
 
         self.heading = self.create_subscription(
             Pose,
             'heading',
             self.heading_callback,
-            10)
+            qos_profile_sensor_data)
         self.heading  # prevent unused variable warning
 
-        self.publisher = self.create_publisher(Pose, 'pose', 4)
+        self.publisher = self.create_publisher(Pose, 'pose', qos_profile_sensor_data)
         self.i = 0
         self.get_logger().info('Pose Fusion Node Live')
 
