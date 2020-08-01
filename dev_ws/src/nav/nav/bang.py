@@ -36,7 +36,7 @@ class Bang(Node):
             qos_profile=qos_profile_sensor_data,
             callback_group=self.group)
 
-        self.sm = SerialMotor("/dev/ttyACM1")
+        self.sm = SerialMotor("/dev/ttyACM2")
         
 
         self.x_dest = 0.0
@@ -139,8 +139,8 @@ class Bang(Node):
             
     def linear_correction(self):
         self.r = self.get_distance()
-        speed = -1*self.linear_smooth(self.r)
-        #print("Speed: {}".format(speed))
+        speed = self.linear_smooth(self.r)
+        print("Speed: {}".format(speed))
         L = .2*self.old[0] + .8*speed
         R = .2*self.old[1] + .8*speed
         self.sm.set_motor(4, L)  # left
@@ -164,25 +164,22 @@ class Bang(Node):
                 self.angle_diff = self.angle_diff + 2*math.pi
                 
             spin = self.angular_smooth(abs(self.angle_diff))
-            #print("Spin: {}".format(spin))
+            print("Spin: {}".format(spin))
             if self.angle_diff > 0:
-                L = spin
                 R = -1*spin
+                L = spin
 
             else:
-                L = -1*spin
                 R = spin
+                L = -1*spin
             
-            L = .2*self.old[0] + .8*L
-            R = .2*self.old[1] + .8*R
-            self.sm.set_motor(4, L)
-            self.sm.set_motor(3, R)
+            R = .2*self.old[0] + .8*R
+            L = .2*self.old[1] + .8*L
+            self.sm.set_motor(4, R)
+            self.sm.set_motor(3, L)
             
             self.old = [L, R]
                 
-        #self.sm.set_motor(3, 0)  # right
-        #self.sm.set_motor(4, 0)  # left
-        #time.sleep(.1)
         
     def steering_angle(self):
         return math.atan2(self.y_dest - self.y, self.x_dest - self.x)
