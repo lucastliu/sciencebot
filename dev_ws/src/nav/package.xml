@@ -2,10 +2,13 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>nav</name>
-  <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <version>1.0.0</version>
+  <description>navigational package to drive skid steer vehicle based on sensor information</description>
   <maintainer email="lucas.liu@duke.edu">Lucas Liu</maintainer>
-  <license>TODO: License declaration</license>
+  <author email="lucas.liu@duke.edu">Lucas Liu</author>
+  <url type="website">https://github.com/lucastliu/autobot</url>
+  
+  <license>GPLv3</license>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
