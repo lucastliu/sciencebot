@@ -16,7 +16,13 @@ class DWMTag():
         self.DWM.write("lec\r".encode())
         time.sleep(1)
         is_not_available = True
+        i = 0
+        c = 0
         while is_not_available:
+            if i >= 10:
+                self.DWM.write("lec\r".encode())
+                time.sleep(1)
+                i = -99
             line=self.DWM.readline()
             if(line):
                 print(line)
@@ -25,9 +31,14 @@ class DWMTag():
                     try:
                         pos_ind = parse.index("POS") #POS
                         if pos_ind is not None:
-                            is_not_available = False
+                            c = c + 1
                     except Exception as ex:
                         print('connecting...')
+            if c >= 3:
+                is_not_available = False
+            time.sleep(.5)
+            i += 1
+        
         print("Connected to " +self.DWM.name)
         self.x_position = 0.00
         self.y_position = 0.00

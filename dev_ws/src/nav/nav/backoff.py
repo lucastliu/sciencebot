@@ -18,7 +18,7 @@ from nav.motors.SerialMotor import SerialMotor
 class Bang(Node):
 
     def __init__(self):
-        super().__init__('position_pid')
+        super().__init__('backoff')
         
         self.group = MutuallyExclusiveCallbackGroup()
 
@@ -47,6 +47,7 @@ class Bang(Node):
         self.r = 1.0
         self.angle_diff = 10
         self.old = [0.0, 0.0]
+        self.curr = [0.0, 0.0]
         self.twist = Twist()
         
         self.get_logger().info('BB Node Live')
@@ -54,14 +55,7 @@ class Bang(Node):
         #self.get_logger().info('Pose: %s' % (pose))  # CHANGE
         self.x = pose.x
         self.y = pose.y
-        temp = math.radians(pose.theta % 360.0) #carefully consider trig options
-        
-        if temp < math.pi:
-            temp = -1*temp
-        else:
-            temp = 2*math.pi - temp
-            
-        self.angle = temp
+        self.angle = self.angle_convert(math.radians(pose.theta % 360.0))
 
     def move_to_callback(self, goal_handle):
         self.get_logger().info('Executing Move To...')
@@ -70,24 +64,23 @@ class Bang(Node):
         self.r = self.get_distance()
         self.get_logger().info('Start r: {0}'.format(self.r))
         self.old = [0, 0]
+        self.curr = [0, 0]
 
-        # return x,y during each cycle
-        # return final position
         feedback_msg = Tune.Feedback()
+
 
         while self.r > 0.2:
 
-            # calculate
-            self.angle_diff = self.angle - self.steering_angle()
-            
-            if self.angle_diff > math.pi:
-                self.angle_diff = self.angle_diff - 2*math.pi
+            # calculate errors
+            self.closest_turn()
+            self.r = self.get_distance()
 
-            if self.angle_diff < -1*math.pi:
-                self.angle_diff = self.angle_diff + 2*math.pi
-                
-            self.angular_correction()
+            # make adjustments to motors instructions
             self.linear_correction()
+            self.angular_correction()
+            
+            # send new commands to motors
+            self.move()
             
             # give feedback
             feedback_msg.x_curr = self.x
@@ -95,43 +88,78 @@ class Bang(Node):
             goal_handle.publish_feedback(feedback_msg)
             #print(feedback_msg)
 
-            # update while condition
-            self.r = self.get_distance()
 
-        #stop motors
+        # stop motors
         self.sm.set_motor(3, 0)  # right
         self.sm.set_motor(4, 0)  # left
 
-        
+        # close out ROS action
         goal_handle.succeed()
-
         result = Tune.Result()
         result.x_final = self.x
         result.y_final = self.y
-        
-        self.angle_diff = 10
-        
         self.get_logger().info('Finish Move To')
 
 
         return result
 
+    def closest_turn(self):
+        """
+        Minimum angle needed to turn is never more than pi radians (180 degrees). 
+        No need to turn the long way around.
+        """
+        
+        a = self.angle - self.steering_angle()
+        if a > math.pi:
+            a = a - 2*math.pi
+
+        if a < -1*math.pi:
+            a = a + 2*math.pi
+            
+        self.angle_diff = a
+        
+    def angle_convert(self, a):
+        """
+        Convert raw angle heading (radians) to proper co-ordinate system
+        """
+        if a > math.pi:
+            a = a - 2*math.pi
+
+        if a < -1*math.pi:
+            a = a + 2*math.pi
+            
+        return a
+            
     def get_distance(self):
         return math.sqrt(
             math.pow(self.x_dest - self.x, 2)
             + math.pow(self.y_dest - self.y, 2)
             )
+            
+    def move(self):
+        self.smoothing()
+        print("Move Speed: {}".format(str(self.curr)))
+        self.sm.set_motor(3, self.curr[0])  # left
+        self.sm.set_motor(4, self.curr[1])  # right
+        self.old = self.curr # update old
+        time.sleep(0.01)
+        
+    def smoothing(self):
+        self.curr[0] = .2*self.old[0] + .8*self.curr[0]
+        self.curr[1] = .2*self.old[1] + .8*self.curr[1]
 
     def linear_smooth(self, d):
-        if d > 1:
-            return 1
+        return .6
+        
+        if d > .7:
+            return .7
         elif d < .6:
             return .6
         else:
             return d
     
     def angular_smooth(self, a):
-        return .7
+        return .58
         #y = a / math.pi
         #if y < .5:
         #    y = .5
@@ -140,46 +168,31 @@ class Bang(Node):
     def linear_correction(self):
         self.r = self.get_distance()
         speed = self.linear_smooth(self.r)
-        print("Speed: {}".format(speed))
-        L = .3*self.old[0] + .7*speed
-        R = .3*self.old[1] + .7*speed
-        self.sm.set_motor(4, R)  # left
-        self.sm.set_motor(3, L)  # right
+        print("Initial Speed: {}".format(speed))
+        self.curr = [speed, speed]
+
+    def angular_correction(self):
+
+        spin = self.angular_smooth(self.angle_diff)
         
-        L = self.r/4
-        time.sleep(L)
-        self.old = [L, R]
-        #self.sm.set_motor(3, 0)  # right
-        #self.sm.set_motor(4, 0)  # left
-        #time.sleep(0.1)
-
-    def angular_correction(self):   
-        while abs(self.angle_diff) > math.pi / 45:
-            self.angle_diff = self.angle - self.steering_angle()
-            
-            if self.angle_diff > math.pi:
-                self.angle_diff = self.angle_diff - 2*math.pi
-
-            if self.angle_diff < -1*math.pi:
-                self.angle_diff = self.angle_diff + 2*math.pi
-                
-            spin = self.angular_smooth(abs(self.angle_diff))
-            print("Spin: {}".format(spin))
+        while abs(self.angle_diff > math.pi / 30): # focus on turning entirely
             if self.angle_diff > 0:
-                R = -1*spin
-                L = spin
-
+                self.curr = [spin, -1 * spin]
             else:
-                R = spin
-                L = -1*spin
+                self.curr = [-1 * spin, spin]
             
-            R = .2*self.old[0] + .8*R
-            L = .2*self.old[1] + .8*L
-            self.sm.set_motor(4, R)
-            self.sm.set_motor(3, L)
+            self.sm.set_motor(3, self.curr[0])  # left
+            self.sm.set_motor(4, self.curr[1])  # right
+            time.sleep(.01)
+            self.closest_turn()
             
-            self.old = [L, R]
-                
+        else:
+            if self.angle_diff > 0:
+                self.curr[0] += 0
+                self.curr[1] -= .3
+            else:
+                self.curr[0] -= .3
+                self.curr[1] += 0
         
     def steering_angle(self):
         return math.atan2(self.y_dest - self.y, self.x_dest - self.x)
