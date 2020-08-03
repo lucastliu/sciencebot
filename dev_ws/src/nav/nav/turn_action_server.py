@@ -9,7 +9,9 @@ from geometry_msgs.msg import Twist
 
 
 class TurnActionServer(Node):
-
+    """
+    Basic server that executes x number of turns
+    """
     def __init__(self):
         super().__init__('turn_action_server')
         self._action_server = ActionServer(
@@ -17,9 +19,8 @@ class TurnActionServer(Node):
             Turn,
             'turn',
             self.execute_callback)
-        
-        self.publisher = self.create_publisher(Twist, 'auto_vel', 10)     # CHANGE
-            
+
+        self.publisher = self.create_publisher(Twist, 'auto_vel', 10)
 
     def execute_callback(self, goal_handle):
         self.get_logger().info('Executing goal...')
@@ -38,9 +39,10 @@ class TurnActionServer(Node):
             twist.angular.z = 0.0
             self.publisher.publish(twist)
             time.sleep(0.5)
-            
+
             feedback_msg.turns_completed = i + 1
-            self.get_logger().info('Feedback: {0}'.format(feedback_msg.turns_completed))
+            self.get_logger().info('Feedback: {0}'
+                                   .format(feedback_msg.turns_completed))
             goal_handle.publish_feedback(feedback_msg)
             time.sleep(1)
 
@@ -49,7 +51,8 @@ class TurnActionServer(Node):
         result = Turn.Result()
         result.turns_done = feedback_msg.turns_completed
         return result
-        
+
+
 def main(args=None):
     rclpy.init(args=args)
 

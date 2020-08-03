@@ -6,7 +6,13 @@ from custom_interfaces.action import Heading
 
 
 class PositionPIDClient(Node):
+    """
+    Client script for a heading action. Requests a desired heading in degrees.
+    Receives current heading feedback during action,
+    as well as final angle after action is completed.
 
+    Action request must be processed by a heading server
+    """
     def __init__(self):
         super().__init__('heading_pid_client')
         self._action_client = ActionClient(self, Heading, 'heading')
@@ -51,7 +57,7 @@ class PositionPIDClient(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    action_client = PositionPIDClient() #TODO: make this recallable
+    action_client = PositionPIDClient()
     dest_angle = float(input("Desired Angle: "))
     angular = [float(item) for item in input("Enter Angular PID Constants : ").split()] 
     action_client.send_goal(dest_angle, angular)

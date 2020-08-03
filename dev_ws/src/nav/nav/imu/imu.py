@@ -1,6 +1,8 @@
 import time
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import qos_profile_sensor_data
+
 from std_msgs.msg import String
 from turtlesim.msg import Pose
 
@@ -9,13 +11,11 @@ import board
 import busio
 import adafruit_bno055
 
-from rclpy.qos import qos_profile_sensor_data
 
 class IMU(Node):
 
     def __init__(self):
         super().__init__('imu')
-        
         # Use these lines for I2C
         i2c = busio.I2C(board.SCL, board.SDA)
         self.sensor = adafruit_bno055.BNO055_I2C(i2c)
@@ -23,27 +23,27 @@ class IMU(Node):
         # User these lines for UART
         # uart = busio.UART(board.TX, board.RX)
         # sensor = adafruit_bno055.BNO055_UART(uart)
-        
-        # TEMP REMOVE CALIBRATION
-        #while not self.sensor.calibrated:
-         #   self.get_logger().info('IMU not calibrated')
-          #  self.get_logger().info(str(self.sensor.calibration_status))
-           # time.sleep(1)
-        
+
+        # calibration
+        while not self.sensor.calibrated:
+            self.get_logger().info('IMU not calibrated')
+            self.get_logger().info(str(self.sensor.calibration_status))
+            time.sleep(1)
+
         self.get_logger().info('Success: IMU Calibration ')
         time.sleep(1)
-        
-        self.publisher_ = self.create_publisher(Pose, 'heading', qos_profile_sensor_data)     # CHANGE
+
+        self.publisher_ = self.create_publisher(Pose, 'heading', qos_profile_sensor_data)
         timer_period = .05  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
 
-        #self.pos_pub = self.create_publisher(Pose, 'imu_position', 10)     # CHANGE
-
+        # disabled as integrated position is very inaccurate
+        # self.pos_pub = self.create_publisher(Pose, 'imu_position', 10)
 
         self.x = 0.0
         self.y = 0.0
         self.theta = 0.0
-        self.accel = 0.5 * timer_period * timer_period # p = .5at^2
+        self.accel = 0.5 * timer_period * timer_period  # p = .5at^2
 
         self.i = 0
 
@@ -57,20 +57,19 @@ class IMU(Node):
         self.i += 1
         if self.i > 10:
             self.i = 0
-            #self.get_logger().info('IMU Pose: "%s"' % msg)
-        
+            # self.get_logger().info('IMU Pose: "%s"' % msg)
+
     def position_update(self):
         x = self.sensor.linear_acceleration[0]
         y = self.sensor.linear_acceleration[1]
         theta = self.sensor.euler[0]
-        
+
         if x:
             self.x = x
         if y:
             self.y = y
         if theta:
             self.theta = theta
-
 
 
 def main(args=None):
@@ -89,6 +88,3 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
-
-
-

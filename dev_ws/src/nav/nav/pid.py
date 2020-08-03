@@ -11,7 +11,7 @@ class PID:
         self.kp = kp
         self.ki = ki
         self.kd = kd
-        self.imax = imax # maximum allowed integration
+        self.imax = imax  # maximum allowed integration
 
         # Correction Terms
         self.cp = 0.0
@@ -50,11 +50,11 @@ class PID:
         self.P = self.kp * self.cp  # Proportional
         self.I = self.ki * self.ci  # Integral
         self.D = self.kd * self.cd  # Derivative
-        
+
         if self.I > self.imax:
             self.I = self.imax
-        
-        if -1*self.I > self.imax:
+
+        if -1 * self.I > self.imax:
             self.I = -1*self.imax
-            
+
         return self.P + self.I + self.D

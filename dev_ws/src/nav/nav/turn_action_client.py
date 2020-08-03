@@ -1,12 +1,15 @@
 import rclpy
 from rclpy.node import Node
-
 from rclpy.action import ActionClient
+
 from custom_interfaces.action import Turn
 
 
 class TurnActionClient(Node):
-
+    """
+    Basic client that requests x number of turns
+    to be completed
+    """
     def __init__(self):
         super().__init__('turn_action_client')
         self._action_client = ActionClient(self, Turn, 'turn')
@@ -43,7 +46,8 @@ class TurnActionClient(Node):
 
     def feedback_callback(self, feedback_msg):
         feedback = feedback_msg.feedback
-        self.get_logger().info('Received feedback: {0}'.format(feedback.turns_completed))
+        self.get_logger().info('Received feedback: {0}'
+                               .format(feedback.turns_completed))
 
 
 def main(args=None):

@@ -1,13 +1,15 @@
 import time
 import rclpy
+
 from rclpy.node import Node
+from rclpy.qos import qos_profile_sensor_data
+
 from std_msgs.msg import String
 from custom_interfaces.msg import Num
-
-from nav.dwm.DWMTag import DWMTag
 from turtlesim.msg import Pose
 
-from rclpy.qos import qos_profile_sensor_data
+from nav.dwm.DWMTag import DWMTag
+
 
 class DWM(Node):
 
@@ -28,11 +30,6 @@ class DWM(Node):
         msg.y = position[1]
 
         self.publisher_.publish(msg)
-        self.i += 1
-
-        if self.i > 10:
-            self.i = 0
-            #self.get_logger().info('Beacons: "%s"' % msg)  # CHANGE 
 
 
 def main(args=None):
@@ -51,6 +48,3 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
-
-
-
