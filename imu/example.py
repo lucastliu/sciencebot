@@ -7,7 +7,7 @@ import adafruit_bno055
 i2c = busio.I2C(board.SCL, board.SDA)
 sensor = adafruit_bno055.BNO055_I2C(i2c)
 
-# User these lines for UART
+# Use these lines for UART
 # uart = busio.UART(board.TX, board.RX)
 # sensor = adafruit_bno055.BNO055_UART(uart)
 
