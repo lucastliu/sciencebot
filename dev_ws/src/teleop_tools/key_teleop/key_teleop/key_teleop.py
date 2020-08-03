@@ -49,6 +49,7 @@ from geometry_msgs.msg import Twist
 import rclpy
 from rclpy.duration import Duration
 from rclpy.node import Node
+from rclpy.qos import qos_profile_sensor_data
 
 
 class Velocity(object):
@@ -124,13 +125,13 @@ class SimpleKeyTeleop(Node):
         super().__init__('key_teleop')
 
         self._interface = interface
-        self._pub_cmd = self.create_publisher(Twist, 'key_vel', 10)
+        self._pub_cmd = self.create_publisher(Twist, 'key_vel', qos_profile_sensor_data)
 
-        self._hz = self.declare_parameter('hz', 2).value
+        self._hz = self.declare_parameter('hz', 70).value
 
         self._forward_rate = self.declare_parameter('forward_rate', 0.8).value
         self._backward_rate = self.declare_parameter('backward_rate', 0.8).value
-        self._rotation_rate = self.declare_parameter('rotation_rate', 0.8).value
+        self._rotation_rate = self.declare_parameter('rotation_rate', -0.8).value
         self._last_pressed = {}
         self._angular = 0
         self._linear = 0
@@ -165,7 +166,7 @@ class SimpleKeyTeleop(Node):
         now = self.get_clock().now()
         keys = []
         for a in self._last_pressed:
-            if now - self._last_pressed[a] < Duration(seconds=0.4):
+            if now - self._last_pressed[a] < Duration(seconds=0.5):
                 keys.append(a)
         linear = 0.0
         angular = 0.0
