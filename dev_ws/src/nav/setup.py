@@ -33,7 +33,12 @@ setup(
             'pid = nav.position_pid:main',
             'turtlepid = nav.turtle_position_pid:main',
             'imupid = nav.imu_pid:main',
-            'turtleturn = nav.turtle_heading_pid:main'
+            'turtleturn = nav.turtle_heading_pid:main',
+            'bang = nav.bang:main',
+            'bturn = nav.bturn:main',
+            'backoff = nav.backoff:main',
+            'bang2 = nav.bang2:main',
+            'bang3 = nav.bang3:main',
         ],
     },
 )
