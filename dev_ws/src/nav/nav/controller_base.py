@@ -8,11 +8,10 @@ from rclpy.action import ActionServer
 from rclpy.node import Node
 from rclpy.callback_groups import MutuallyExclusiveCallbackGroup
 from rclpy.callback_groups import ReentrantCallbackGroup
-from rclpy.executors import MultiThreadedExecutor
 from rclpy.qos import qos_profile_sensor_data
 
 
-class ControllerBase(ABC):
+class ControllerBase(Node, ABC):
     """
     Base Abstract Class for a Vehicle Control Node.
     Receives information from topic 
@@ -32,7 +31,7 @@ class ControllerBase(ABC):
 
         self.subscription = self.create_subscription(
             msg_type=pose_type,
-            topic=pose_source,
+            topic=pose_name,
             callback=self.pose_callback,
             qos_profile=qos_profile_sensor_data,
             callback_group=self.group)
