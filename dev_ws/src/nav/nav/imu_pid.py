@@ -3,9 +3,6 @@ import time
 
 import rclpy
 from rclpy.action import ActionServer
-from rclpy.node import Node
-from rclpy.callback_groups import ReentrantCallbackGroup
-from rclpy.callback_groups import MutuallyExclusiveCallbackGroup
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.qos import qos_profile_sensor_data
 
@@ -16,41 +13,23 @@ from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
 
 from nav.pid import PID
+from nav.controller_base import ControllerBase
 
 
-class ImuPID(Node):
+class ImuPID(ControllerBase):
     """
     Action Server that processes heading type actions
     Utilizes a PID approach to reach desired heading
     """
     def __init__(self):
-        super().__init__('imu_pid')
-
-        self.group = MutuallyExclusiveCallbackGroup()
-
-        self._action_server = ActionServer(
-            node=self,
-            action_type=Heading,
-            action_name='heading',
-            execute_callback=self.move_to_callback,
-            callback_group=self.group)
-
-        self.subscription = self.create_subscription(
-            msg_type=Pose,
-            topic='pose',
-            callback=self.pose_callback,
-            qos_profile=qos_profile_sensor_data,
-            callback_group=self.group)
+        super().__init__('imu_pid', Pose, 'pose', Heading, 'heading')
 
         p = qos_profile_sensor_data
         p.depth = 1
         self.publisher = self.create_publisher(Twist, 'auto_vel', qos_profile_sensor_data)
-        self.pid_publisher = self.create_publisher(Cpid, 'hpid', 1) 
+        self.pid_publisher = self.create_publisher(Cpid, 'hpid', 1)
 
-        self.angle_diff = 50
-        self.angle = 0.0
         self.dest_angle = 0.0
-
         self.twist = Twist()
         self.cpid = Cpid()
 
@@ -59,26 +38,14 @@ class ImuPID(Node):
     def pose_callback(self, pose):
         self.x = pose.x
         self.y = pose.y
-        temp = math.radians(pose.theta % 360)
+        self.angle = self.angle_convert(math.radians(pose.theta % 360.0))
 
-        if temp < math.pi:
-            temp = -1*temp
-        else:
-            temp = 2*math.pi - temp
-
-        self.angle = temp
-
-    def move_to_callback(self, goal_handle):
+    def action_callback(self, goal_handle):
         self.get_logger().info('Executing Turn...')
         A = goal_handle.request.angular
         self.angle_pid = PID(kp=A[0], ki=A[1], kd=A[2], imax=.3)  # .1 .005 0     .7 m/s movement       [.1 0 11 100 degree, one overshoot (max .9), depth=5]
-        temp = math.radians(goal_handle.request.dest_angle % 360)
-        if temp < math.pi:
-            temp = -1*temp
-        else:
-            temp = 2*math.pi - temp
-
-        self.dest_angle = temp
+        self.dest_angle = math.radians(goal_handle.request.dest_angle % 360)
+        self.dest_angle = self.angle_convert(self.dest_angle)
 
         # return x,y during each cycle
         # return final position
@@ -104,26 +71,18 @@ class ImuPID(Node):
         self.twist.linear.x = 0.0
         self.twist.angular.z = 0.0
         self.publisher.publish(self.twist)
-        self.angle_diff = self.angle - self.dest_angle
 
         goal_handle.succeed()
 
         result = Heading.Result()
         result.final = math.degrees(self.angle)
-        self.angle_diff = 10
+        self.angle_diff = 2 * math.pi
         self.get_logger().info('Finished Turn')
 
         return result
 
     def angular_correction(self):
-        self.angle_diff = self.angle - self.dest_angle
-
-        if self.angle_diff > math.pi:
-            self.angle_diff = self.angle_diff - 2*math.pi
-
-        if self.angle_diff < -1*math.pi:
-            self.angle_diff = self.angle_diff + 2*math.pi
-
+        self.calculate_closest_turn()
         pid_angle = self.angle_pid.update(self.angle_diff)
         print("self diff: {0}".format(self.angle_diff))
         self.twist.angular.z = pid_angle
@@ -145,6 +104,7 @@ def main(args=None):
 
     finally:
         rclpy.shutdown()
+
 
 if __name__ == '__main__':
     main()

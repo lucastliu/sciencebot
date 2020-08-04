@@ -31,13 +31,13 @@ class PositionPIDClient(Node):
 
     def goal_response_callback(self, future):
         goal_handle = future.result()
-        
+
         if not goal_handle.accepted:
             self.get_logger().info('Goal rejected :(')
             return
 
         self.get_logger().info('Goal accepted :)')
-        
+
         self._get_result_future = goal_handle.get_result_async()
 
         self._get_result_future.add_done_callback(self.get_result_callback)
@@ -58,8 +58,8 @@ def main(args=None):
     rclpy.init(args=args)
 
     action_client = PositionPIDClient()
-    dest_angle = float(input("Desired Angle: "))
-    angular = [float(item) for item in input("Enter Angular PID Constants : ").split()] 
+    dest_angle = float(input("Desired Angle (Degrees): "))
+    angular = [float(item) for item in input("Enter Angular PID Constants : ").split()]
     action_client.send_goal(dest_angle, angular)
 
     rclpy.spin(action_client)

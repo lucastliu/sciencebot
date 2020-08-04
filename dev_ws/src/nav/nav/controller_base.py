@@ -14,12 +14,13 @@ from rclpy.qos import qos_profile_sensor_data
 class ControllerBase(Node, ABC):
     """
     Base Abstract Class for a Vehicle Control Node.
-    Receives information from topic 
+    Receives information from topic
     Receives action client requests
     """
     def __init__(self, name, pose_type, pose_name, action_type, action_name):
         super().__init__(name)
 
+        # Allows pose callback to occur during execution
         self.group = MutuallyExclusiveCallbackGroup()
 
         self._action_server = ActionServer(
@@ -84,14 +85,6 @@ class ControllerBase(Node, ABC):
         https://docs.python.org/2/library/math.html
         """
         return math.atan2(self.y_dest - self.y, self.x_dest - self.x)
-
-    @abstractmethod
-    def linear_correction(self):
-        pass
-
-    @abstractmethod
-    def angular_correction(self):
-        pass
 
     @abstractmethod
     def action_callback(self, goal_handle):

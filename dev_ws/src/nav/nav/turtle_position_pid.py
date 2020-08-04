@@ -78,7 +78,7 @@ class PositionPID(ControllerBase):
         result.x_final = self.x
         result.y_final = self.y
 
-        self.get_logger().info('Finish Move To')
+        self.get_logger().info('Finished Move To')
         return result
 
     def linear_correction(self):
@@ -86,15 +86,8 @@ class PositionPID(ControllerBase):
         self.twist.linear.x = pid_dist
 
     def angular_correction(self):
-        self.angle_diff = self.steering_angle() - self.angle
-
-        if self.angle_diff > math.pi:
-            self.angle_diff = self.angle_diff - 2*math.pi
-
-        if self.angle_diff < -1*math.pi:
-            self.angle_diff = self.angle_diff + 2*math.pi
-
-        pid_angle = self.angle_pid.update(self.angle_diff)
+        self.calculate_closest_turn()
+        pid_angle = self.angle_pid.update(self.angle_diff) # TODO:-1 self angle diff?
         self.twist.angular.z = pid_angle
 
 

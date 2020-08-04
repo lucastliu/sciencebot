@@ -2,9 +2,6 @@ import math
 import time
 
 import rclpy
-from rclpy.action import ActionServer
-from rclpy.node import Node
-from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.executors import MultiThreadedExecutor
 
 from custom_interfaces.action import Heading
@@ -12,39 +9,19 @@ from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
 
 from nav.pid import PID
+from nav.controller_base import ControllerBase
 
 
-class TurtleTurnPID(Node):
+class TurtleTurnPID(ControllerBase):
     """
     Designed to operate with ROS turtlesim.
     Rotates turtle to desired heading using
     angular PID controller.
     """
     def __init__(self):
-        super().__init__('turtle_turn')
-
-        self.group = ReentrantCallbackGroup()
-
-        self._action_server = ActionServer(
-            node=self,
-            action_type=Heading,
-            action_name='heading',
-            execute_callback=self.turn_to_callback,
-            callback_group=self.group)
-
-        self.subscription = self.create_subscription(
-            msg_type=Pose,
-            topic='turtle1/pose',
-            callback=self.pose_callback,
-            qos_profile=4,
-            callback_group=self.group)
+        super().__init__('turtle_turn_pid', Pose, 'turtle1/pose', Heading, 'heading')
 
         self.publisher = self.create_publisher(Twist, 'turtle1/cmd_vel', 1)
-
-        self.angle_diff = 99
-        self.angle = 0.0
-        self.dest_angle = 0.0
-
         self.twist = Twist()
 
         self.get_logger().info('Turtle Heading PID Node Live')
@@ -54,11 +31,12 @@ class TurtleTurnPID(Node):
         self.y = pose.y
         self.angle = pose.theta
 
-    def turn_to_callback(self, goal_handle):
+    def action_callback(self, goal_handle):
         self.get_logger().info('Executing Turn...')
         A = goal_handle.request.angular
         self.angle_pid = PID(kp=A[0], ki=A[1], kd=A[2])
         self.dest_angle = math.radians(goal_handle.request.dest_angle % 360)
+        self.dest_angle = self.angle_convert(self.dest_angle)
 
         feedback_msg = Heading.Feedback()
 
@@ -83,13 +61,13 @@ class TurtleTurnPID(Node):
 
         result = Heading.Result()
         result.final = math.degrees(self.angle)
-        self.angle_diff = 99
+        self.angle_diff = 2 * math.pi
         self.get_logger().info('Finished Turn')
 
         return result
 
     def angular_correction(self):
-        self.angle_diff = self.dest_angle - self.angle
+        self.calculate_closest_turn
         pid_angle = self.angle_pid.update(self.angle_diff)
         self.twist.angular.z = pid_angle
 

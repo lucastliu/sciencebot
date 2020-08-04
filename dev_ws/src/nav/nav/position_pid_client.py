@@ -59,10 +59,13 @@ class PositionPIDClient(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    action_client = PositionPIDClient() #TODO: make this recallable
+    action_client = PositionPIDClient()
     x, y = [float(item) for item in input("Desired X Y: ").split()]
-    linear = [0.0, 0.0, 0.0]  # [float(item) for item in input("Enter linear PID Constants : ").split()] 
-    angular = [0.0, 0.0, 0.0]  # [float(item) for item in input("Enter Angular PID Constants : ").split()] 
+
+    linear = [float(item) for item in input("Enter linear PID Constants : ").split()]
+    angular = [float(item) for item in input("Enter Angular PID Constants : ").split()]
+    # linear = [0.0, 0.0, 0.0]
+    # angular = [0.0, 0.0, 0.0]
     action_client.send_goal(x, y, linear, angular)
 
     rclpy.spin(action_client)
