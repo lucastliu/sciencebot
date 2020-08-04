@@ -121,7 +121,7 @@ class Bang(ControllerBase):
         if abs(self.angle_diff) > (math.pi / 10):  # focus on turning entirely
             print('ANGULAR')
             spin = .6
-            if self.angle_diff > 0:
+            if self.angle_diff < 0:
                 self.curr = [spin, -1 * spin]
             else:
                 self.curr = [-1 * spin, spin]

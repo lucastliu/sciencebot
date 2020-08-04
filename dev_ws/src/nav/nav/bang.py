@@ -112,7 +112,7 @@ class Bang(ControllerBase):
             self.calculate_closest_turn()
             spin = self.angular_smooth(abs(self.angle_diff))
             print("Spin: {}".format(spin))
-            if self.angle_diff > 0:
+            if self.angle_diff < 0:
                 R = -1*spin
                 L = spin
 

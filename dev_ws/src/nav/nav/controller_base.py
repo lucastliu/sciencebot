@@ -48,7 +48,7 @@ class ControllerBase(Node, ABC):
         No need to turn the long way around.
         """
 
-        a = self.angle - self.steering_angle()
+        a = self.steering_angle() - self.angle
         if a > math.pi:
             a -= 2 * math.pi
 

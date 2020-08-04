@@ -66,8 +66,24 @@ class TurtleTurnPID(ControllerBase):
 
         return result
 
+    def steering_angle(self):
+        """
+        In this case, steering angle is simply goal angle
+        """
+        return self.dest_angle
+
+
+    def angle_convert(self, a):
+        """
+        Convert raw angle heading (radians) to turtlesim co-ordinate system
+        """
+        if a > math.pi:
+            a -= 2*math.pi
+
+        return a
+    
     def angular_correction(self):
-        self.calculate_closest_turn
+        self.calculate_closest_turn()
         pid_angle = self.angle_pid.update(self.angle_diff)
         self.twist.angular.z = pid_angle
 

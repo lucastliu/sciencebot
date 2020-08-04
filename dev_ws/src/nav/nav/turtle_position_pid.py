@@ -87,7 +87,7 @@ class PositionPID(ControllerBase):
 
     def angular_correction(self):
         self.calculate_closest_turn()
-        pid_angle = self.angle_pid.update(self.angle_diff) # TODO:-1 self angle diff?
+        pid_angle = self.angle_pid.update(self.angle_diff)
         self.twist.angular.z = pid_angle
 
 
