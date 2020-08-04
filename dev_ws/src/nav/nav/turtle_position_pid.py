@@ -2,20 +2,16 @@ import math
 import time
 
 import rclpy
-from rclpy.action import ActionServer
-from rclpy.node import Node
-from rclpy.callback_groups import ReentrantCallbackGroup
-from rclpy.callback_groups import MutuallyExclusiveCallbackGroup
-from rclpy.executors import MultiThreadedExecutor
 
 from custom_interfaces.action import MoveTo, Tune
 from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
 
 from nav.pid import PID
+from nav.controller_base import ControllerBase
 
 
-class PositionPID(Node):
+class PositionPID(ControllerBase):
     """
     Designed to operate with ROS turtlesim.
     Moves turtle to desired heading using
@@ -23,33 +19,11 @@ class PositionPID(Node):
     an angular PID controller.
     """
     def __init__(self):
-        super().__init__('position_pid')
-
-        self.group = MutuallyExclusiveCallbackGroup()
-
-        self._action_server = ActionServer(
-            node=self,
-            action_type=Tune
-            action_name='move_to',
-            execute_callback=self.move_to_callback,
-            callback_group=self.group)
-
-        self.subscription = self.create_subscription(
-            msg_type=Pose,
-            topic='turtle1/pose',
-            callback=self.pose_callback,
-            qos_profile=10,
-            callback_group=self.group)
+        super().__init__('turtle_position_pid', Pose, 'turtle1/pose', Tune, 'move_to')
 
         self.publisher = self.create_publisher(Twist, 'turtle1/cmd_vel', 10)
 
-        self.x_dest = 0.0
-        self.y_dest = 0.0
-        self.x = 0.0
-        self.y = 0.0
-        self.angle = 0.0
-        self.r = 1.0
-        self.angle_diff = 100
+        self.r = 99.99
         self.twist = Twist()
 
         self.get_logger().info('Turtle PID Control Live')
@@ -59,7 +33,7 @@ class PositionPID(Node):
         self.y = pose.y
         self.angle = pose.theta
 
-    def move_to_callback(self, goal_handle):
+    def action_callback(self, goal_handle):
         self.get_logger().info('Executing Move To...')
         L = goal_handle.request.linear
         A = goal_handle.request.angular
@@ -68,7 +42,7 @@ class PositionPID(Node):
         self.x_dest = goal_handle.request.x_dest
         self.y_dest = goal_handle.request.y_dest
         self.r = self.get_distance()
-        self.angle_diff = 100
+        self.angle_diff = 2 * math.pi
         self.get_logger().info('Start r: {0}'.format(self.r))
 
         # return x,y during each cycle
@@ -106,12 +80,6 @@ class PositionPID(Node):
         self.get_logger().info('Finish Move To')
         return result
 
-    def get_distance(self):
-        return math.sqrt(
-            math.pow(self.x_dest - self.x, 2)
-            + math.pow(self.y_dest - self.y, 2)
-            )
-
     def linear_correction(self):
         pid_dist = self.distance_pid.update(self.r)
         self.twist.linear.x = pid_dist
@@ -127,9 +95,6 @@ class PositionPID(Node):
 
         pid_angle = self.angle_pid.update(self.angle_diff)
         self.twist.angular.z = pid_angle
-
-    def steering_angle(self):
-        return math.atan2(self.y_dest - self.y, self.x_dest - self.x)
 
 
 def main(args=None):
