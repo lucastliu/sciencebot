@@ -36,7 +36,7 @@ class Bang(ControllerBase):
         self.y = pose.y
         self.angle = self.angle_convert(math.radians(pose.theta % 360.0))
 
-    def move_to_callback(self, goal_handle):
+    def action_callback(self, goal_handle):
         self.get_logger().info('Executing Move To...')
         self.x_dest = goal_handle.request.x_dest
         self.y_dest = goal_handle.request.y_dest

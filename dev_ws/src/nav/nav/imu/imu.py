@@ -25,10 +25,10 @@ class IMU(Node):
         # sensor = adafruit_bno055.BNO055_UART(uart)
 
         # calibration
-        while not self.sensor.calibrated:
-            self.get_logger().info('IMU not calibrated')
-            self.get_logger().info(str(self.sensor.calibration_status))
-            time.sleep(1)
+#         while not self.sensor.calibrated:
+#             self.get_logger().info('IMU not calibrated')
+#             self.get_logger().info(str(self.sensor.calibration_status))
+#             time.sleep(1)
 
         self.get_logger().info('Success: IMU Calibration ')
         time.sleep(1)

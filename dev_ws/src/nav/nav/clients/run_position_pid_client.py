@@ -5,12 +5,13 @@ from rclpy.action import ActionClient
 from custom_interfaces.action import MoveTo
 
 
-class PositionLoopClient(Node):
+class PositionPIDClient(Node):
     """
-    Creates a series of action clients
-    for sequenced goal seeking positions
+    Client script for a position action. Requests a desired heading in degrees.
+    Receives current heading feedback during action,
+    as well as final angle after action is completed.
 
-    Client requests must be accepted by relevant Action Server
+    Action request must be processed by a heading server
     """
     def __init__(self):
         super().__init__('position_pid_client')
@@ -30,13 +31,13 @@ class PositionLoopClient(Node):
 
     def goal_response_callback(self, future):
         goal_handle = future.result()
-
+        
         if not goal_handle.accepted:
             self.get_logger().info('Goal rejected :(')
             return
 
         self.get_logger().info('Goal accepted :)')
-
+        
         self._get_result_future = goal_handle.get_result_async()
 
         self._get_result_future.add_done_callback(self.get_result_callback)
@@ -53,20 +54,19 @@ class PositionLoopClient(Node):
                                .format(feedback.x_curr, feedback.y_curr))
 
 
-def goal_seek(x, y):
-    """
-    Send request to goal seek position x, y
-    """
-    rclpy.init(args=None)
-    action_client = PositionLoopClient()
-    action_client.send_goal(x, y)
-    rclpy.spin(action_client)
-
-
 def main(args=None):
-    for x in range(3):
-        goal_seek(.5, .5)
-        goal_seek(1.0, 1.0)
+    rclpy.init(args=args)
+
+    action_client = PositionPIDClient()
+    x, y = [float(item) for item in input("Desired X Y: ").split()]
+
+    #linear = [float(item) for item in input("Enter linear PID Constants : ").split()]
+    #angular = [float(item) for item in input("Enter Angular PID Constants : ").split()]
+    # linear = [0.0, 0.0, 0.0]
+    # angular = [0.0, 0.0, 0.0]
+    action_client.send_goal(x, y)
+
+    rclpy.spin(action_client)
 
 
 if __name__ == '__main__':

@@ -74,8 +74,9 @@ class DWMTag():
             else:
                 print("Distance not calculated: ", line.decode())
         except Exception as ex:
-            self.DWM.write("lec\r".encode())
-            time.sleep(1)
+            pass
+#             self.DWM.write("lec\r".encode())
+#             time.sleep(1)
 
     def get_pos(self):
         """
