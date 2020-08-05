@@ -1,6 +1,7 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
 
+
 def generate_launch_description():
     return LaunchDescription([
         Node(
@@ -10,12 +11,6 @@ def generate_launch_description():
             emulate_tty=True
         ),
         Node(
-            package='nav',
-            node_executable='pid',
-            output="screen",
-            emulate_tty=True
-        ),
-         Node(
              package='nav',
              node_executable='motors',
              output="screen",
