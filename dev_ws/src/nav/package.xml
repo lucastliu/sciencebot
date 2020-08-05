@@ -3,7 +3,7 @@
 <package format="3">
   <name>nav</name>
   <version>1.0.0</version>
-  <description>navigational package to drive skid steer vehicle based on sensor information</description>
+  <description>navigational package to goal seek based on sensor information</description>
   <maintainer email="lucas.liu@duke.edu">Lucas Liu</maintainer>
   <author email="lucas.liu@duke.edu">Lucas Liu</author>
   <url type="website">https://github.com/lucastliu/autobot</url>
