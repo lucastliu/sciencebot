@@ -8,3 +8,4 @@ dev_ws/log
 motorController.py
 test.py
 Navigation/motorController.py
+*.goutputstream*
