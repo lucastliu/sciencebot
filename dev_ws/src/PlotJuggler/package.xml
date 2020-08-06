@@ -2,9 +2,9 @@
 <package format="3">
     <name>plotjuggler</name>
     <version>2.8.3</version>
-    <description>PlotJuggler: juggle with data</description>
+    <description>PlotJuggler: juggle with data. Modified by Lucas Liu.</description>
 
-    <maintainer email="davide.faconti@gmail.com">Davide Faconti</maintainer>
+    <maintainer email="lucas.liu@duke.edu">Lucas Liu</maintainer>
     <license>LGPLv3</license>
 
     <url type="website">https://github.com/facontidavide/PlotJuggler</url>
@@ -47,6 +47,6 @@
 
     <!-- The export tag contains other, unspecified, tags -->
     <export>
-        <!-- build_type condition="$ROS_VERSION == 2">ament_cmake</build_type -->
+        <build_type condition="$ROS_VERSION == 2">ament_cmake</build_type>
     </export>
 </package>
