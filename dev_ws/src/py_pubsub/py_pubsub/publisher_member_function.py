@@ -17,7 +17,7 @@ from rclpy.node import Node
 
 from std_msgs.msg import String
 
-from tutorial_interfaces.msg import Num    # CHANGE
+from custom_interfaces.msg import Num    # CHANGE
 
 class MinimalPublisher(Node):
 
