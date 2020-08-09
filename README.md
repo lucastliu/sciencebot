@@ -19,7 +19,7 @@
   <p align="center">
     A modular low-cost research vehicle platform
     <br />
-    <a href="https://github.com/lucastliu/sciencebot"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/lucastliu/sciencebot/wiki"><strong>Explore the wiki »</strong></a>
     <br />
     <br />
     <a href="https://github.com/lucastliu/sciencebot">View Demo</a>

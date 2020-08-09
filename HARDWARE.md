@@ -11,7 +11,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/lucastliu/sciencebot">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="images/bot34.jpg" alt="Logo" width="426" height="328">
   </a>
 
   <h3 align="center">sciencebot</h3>
@@ -19,7 +19,7 @@
   <p align="center">
     A modular low-cost research vehicle platform
     <br />
-    <a href="https://github.com/lucastliu/sciencebot"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/lucastliu/sciencebot/wiki"><strong>Explore the wiki »</strong></a>
     <br />
     <br />
     <a href="https://github.com/lucastliu/sciencebot">View Demo</a>
@@ -88,41 +88,41 @@ Gather parts. Acquire appropriate screwdriver. Multimeter also useful for debugg
 
     The Raspberry Pi is the central brain of the vehicle. All other components will be hooked up to the Pi.
 
-    ![pi_pins][pi_pins]
+![pi_pins][pi_pins]
 
     The preferred method of powering the Pi is to simply connect a micro-usb cable to a USB power bank. This will allow for a significantly longer operating time, as the Pi consumes much more power than the Arduino. While developing / installing, one can also use wall power.
 
     Alternatively, one can power the Pi through the 18650s by wiring the 12V battery source to the 12V input of the voltage converter, then connecting the 5V output of the converter to the micro-usb power port on the Pi. With this setup, the battery will drain quickly, as it must power both the Pi and Arduino.
 
-    ![converter][converter]
+![converter][converter]
 
 
  
 #### Wheels
 
     Attach wheel to motor shaft. Place thread ziptie through motor and chassis base. Hand dexterity required here. "Pre-bending" the ziptie before threading can make this easier. 
-    ![botbottomfit][bot_fitting]
-    ![botbottom1][bot_bottom_1]
+![botbottomfit][bot_fitting]
+![botbottom1][bot_bottom_1]
     Thread power and ground wires from motor through chassis. Repeat for all wheels.
-    ![botbottom2][bot_bottom_2]
+![botbottom2][bot_bottom_2]
 
 
 #### Arduino Motor Microcontroller
 
     Our Arduino Uno will serve as the motor microcontroller. Attatch the motor shield to the Arduino, and wire the motors to the shield.
 
-    ![ard1][ard1]
+![ard1][ard1]
 
     using the USB A/B Cable, connect the Arduino to the Raspberry Pi.
 
-    ![ard2][ard2]
+![ard2][ard2]
 
     
     Test the motors by running `motor_test.py` (located under motors folder) on the Pi. Note the direction of spin for each wheel. Adjust the code in the Arduino `SerialMotor.ino` file, or the `SerialMotor.py` file to correct. Note that these files exist in the standalone motors folder, but also under dev_ws/src/nav/nav/motors for the ROS2 implementation. Changes need to be made in the dev_ws subdirectory to take effect for the ROS implementation. Same goes for the standalone.
 
 
 #### BNO055 IMU
-    ![imu][imu]
+![imu][imu]
     1. Connect the Power, Ground, SCL, and SDA pins to the correct pinouts on the Pi. [Sensor Pinouts](https://learn.adafruit.com/adafruit-bno055-absolute-orientation-sensor/pinouts)
 
     2. Enable I2C on your Pi **(Pi > Preferences > Raspberry Pi Configuration > Interfaces)**
@@ -138,7 +138,7 @@ Gather parts. Acquire appropriate screwdriver. Multimeter also useful for debugg
 
 #### DWM1001
 
-    ![dwm][dwm]
+![dwm][dwm]
 
       Follow the [Quick Deployment Guide](https://www.decawave.com/wp-content/uploads/2019/03/DWM1001_Gateway_Quick_Deployment_Guide.pdf)
 
@@ -149,7 +149,7 @@ Gather parts. Acquire appropriate screwdriver. Multimeter also useful for debugg
 
       2. Main interest is to USB hookup each DWM to a computer, and use TeraTerm to program each DWM in UART mode. Instructions for this start on page 11 of the Quick Deployment Guide. You will need a minimum a DWM configured for tag mode (the one on the vehicle), an initator DWM, and at least 2 anchor DWMs. You must program the x,y,z (arbitrary origin) of the initiator and anchors, then place the modules in your physical space accordingly.
 
-      ![dwms][dwms]
+![dwms][dwms]
 
       It tends to be easiest to set one DWM position at the origin, and place the other tags relative to the origin DWM.
 
@@ -159,7 +159,7 @@ Gather parts. Acquire appropriate screwdriver. Multimeter also useful for debugg
 
 #### OpenMV Cam H7 (Optional)
 
-    ![camh7][camh7]
+![camh7][camh7]
 
     Cameras are attached to 3D printed mounts. Wire micro-usb cable to Pi's USB ports (USB provides channel for Data and power).
 
