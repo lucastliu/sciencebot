@@ -83,7 +83,7 @@ within `dev_ws`, source code is organized into packages under the `src` folder
 
 Other folders contain basic standalone scripts for individual components (not tied to ROS2 in any way).
 
-See seperate [Hardware Documentation](https://github.com/lucastliu/sciencebot/HARDWARE.md) for details on the physical vehicle build, and sensor information
+See seperate [Hardware Documentation](https://github.com/lucastliu/sciencebot/blob/master/HARDWARE.md) for details on the physical vehicle build, and sensor information
 
 <!-- GETTING STARTED -->
 ## Getting Started

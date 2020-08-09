@@ -32,7 +32,7 @@
 # Hardware Details
 
 Guide for the physical vehicle construction, as well as sensor information
-See seperate [Main README](https://github.com/lucastliu/sciencebot/README.md) for overview and software documentation.
+See seperate [Main README](https://github.com/lucastliu/sciencebot/blob/master/README.md) for overview and software documentation.
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
 - [Hardware Details](#hardware-details)
