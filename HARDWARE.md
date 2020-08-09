@@ -10,22 +10,22 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/lucastliu/sciencebot">
-    <img src="images/bot34.jpg" alt="Logo" width="426" height="328">
-  </a>
+<a href="https://github.com/lucastliu/sciencebot">
+<img src="images/bot34.jpg" alt="Logo" width="426" height="328">
+</a>
 
-  <h3 align="center">sciencebot</h3>
+<h3 align="center">sciencebot</h3>
 
-  <p align="center">
-    A modular low-cost research vehicle platform
-    <br />
-    <a href="https://github.com/lucastliu/sciencebot/wiki"><strong>Explore the wiki »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/lucastliu/sciencebot">View Demo</a>
-    ·
-    <a href="https://github.com/lucastliu/sciencebot/issues">Request Feature</a>
-  </p>
+<p align="center">
+A modular low-cost research vehicle platform
+<br />
+<a href="https://github.com/lucastliu/sciencebot/wiki"><strong>Explore the wiki »</strong></a>
+<br />
+<br />
+<a href="https://github.com/lucastliu/sciencebot">View Demo</a>
+·
+<a href="https://github.com/lucastliu/sciencebot/issues">Request Feature</a>
+</p>
 </p>
 
 
@@ -36,19 +36,19 @@ See seperate [Main README](https://github.com/lucastliu/sciencebot/blob/master/R
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
 - [Hardware Details](#hardware-details)
-  * [Table of Contents](#table-of-contents)
-  * [Hardware Technologies](#hardware-technologies)
-  * [Images](#images)
-  * [Getting Started](#getting-started)
-    + [Prerequisites](#prerequisites)
-    + [Installation](#installation)
-      - [Raspberry Pi](#raspberry-pi)
-      - [Wheels](#wheels)
-      - [Arduino Motor Microcontroller](#arduino-motor-microcontroller)
-      - [BNO055 IMU](#bno055-imu)
-      - [DWM1001](#dwm1001)
-      - [OpenMV Cam H7 (Optional)](#openmv-cam-h7--optional-)
-  * [Testing & Troubleshooting](#testing---troubleshooting)
+* [Table of Contents](#table-of-contents)
+* [Hardware Technologies](#hardware-technologies)
+* [Images](#images)
+* [Getting Started](#getting-started)
++ [Prerequisites](#prerequisites)
++ [Installation](#installation)
+    - [Raspberry Pi](#raspberry-pi)
+    - [Wheels](#wheels)
+    - [Arduino Motor Microcontroller](#arduino-motor-microcontroller)
+    - [BNO055 IMU](#bno055-imu)
+    - [DWM1001](#dwm1001)
+    - [OpenMV Cam H7 (Optional)](#openmv-cam-h7--optional-)
+* [Testing & Troubleshooting](#testing---troubleshooting)
 
 ## Hardware Technologies
 * [Raspberry Pi 3B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/)
@@ -86,84 +86,84 @@ Gather parts. Acquire appropriate screwdriver. Multimeter also useful for debugg
 
 #### Raspberry Pi
 
-    The Raspberry Pi is the central brain of the vehicle. All other components will be hooked up to the Pi.
+The Raspberry Pi is the central brain of the vehicle. All other components will be hooked up to the Pi.
 
 ![pi_pins][pi_pins]
 
-    The preferred method of powering the Pi is to simply connect a micro-usb cable to a USB power bank. This will allow for a significantly longer operating time, as the Pi consumes much more power than the Arduino. While developing / installing, one can also use wall power.
+The preferred method of powering the Pi is to simply connect a micro-usb cable to a USB power bank. This will allow for a significantly longer operating time, as the Pi consumes much more power than the Arduino. While developing / installing, one can also use wall power.
 
-    Alternatively, one can power the Pi through the 18650s by wiring the 12V battery source to the 12V input of the voltage converter, then connecting the 5V output of the converter to the micro-usb power port on the Pi. With this setup, the battery will drain quickly, as it must power both the Pi and Arduino.
+Alternatively, one can power the Pi through the 18650s by wiring the 12V battery source to the 12V input of the voltage converter, then connecting the 5V output of the converter to the micro-usb power port on the Pi. With this setup, the battery will drain quickly, as it must power both the Pi and Arduino.
 
 ![converter][converter]
 
 
- 
+
 #### Wheels
 
-    Attach wheel to motor shaft. Place thread ziptie through motor and chassis base. Hand dexterity required here. "Pre-bending" the ziptie before threading can make this easier. 
+Attach wheel to motor shaft. Place thread ziptie through motor and chassis base. Hand dexterity required here. "Pre-bending" the ziptie before threading can make this easier. 
 ![botbottomfit][bot_fitting]
 ![botbottom1][bot_bottom_1]
-    Thread power and ground wires from motor through chassis. Repeat for all wheels.
+Thread power and ground wires from motor through chassis. Repeat for all wheels.
 ![botbottom2][bot_bottom_2]
 
 
 #### Arduino Motor Microcontroller
 
-    Our Arduino Uno will serve as the motor microcontroller. Attatch the motor shield to the Arduino, and wire the motors to the shield.
+Our Arduino Uno will serve as the motor microcontroller. Attatch the motor shield to the Arduino, and wire the motors to the shield.
 
 ![ard1][ard1]
 
-    using the USB A/B Cable, connect the Arduino to the Raspberry Pi.
+using the USB A/B Cable, connect the Arduino to the Raspberry Pi.
 
 ![ard2][ard2]
 
-    
-    Test the motors by running `motor_test.py` (located under motors folder) on the Pi. Note the direction of spin for each wheel. Adjust the code in the Arduino `SerialMotor.ino` file, or the `SerialMotor.py` file to correct. Note that these files exist in the standalone motors folder, but also under dev_ws/src/nav/nav/motors for the ROS2 implementation. Changes need to be made in the dev_ws subdirectory to take effect for the ROS implementation. Same goes for the standalone.
+
+Test the motors by running `motor_test.py` (located under motors folder) on the Pi. Note the direction of spin for each wheel. Adjust the code in the Arduino `SerialMotor.ino` file, or the `SerialMotor.py` file to correct. Note that these files exist in the standalone motors folder, but also under dev_ws/src/nav/nav/motors for the ROS2 implementation. Changes need to be made in the dev_ws subdirectory to take effect for the ROS implementation. Same goes for the standalone.
 
 
 #### BNO055 IMU
 ![imu][imu]
-    1. Connect the Power, Ground, SCL, and SDA pins to the correct pinouts on the Pi. [Sensor Pinouts](https://learn.adafruit.com/adafruit-bno055-absolute-orientation-sensor/pinouts)
+1. Connect the Power, Ground, SCL, and SDA pins to the correct pinouts on the Pi. [Sensor Pinouts](https://learn.adafruit.com/adafruit-bno055-absolute-orientation-sensor/pinouts)
 
-    2. Enable I2C on your Pi **(Pi > Preferences > Raspberry Pi Configuration > Interfaces)**
+2. Enable I2C on your Pi **(Pi > Preferences > Raspberry Pi Configuration > Interfaces)**
 
-    3. Run the [IMU example script](https://github.com/lucastliu/sciencebot/blob/master/imu/example.py) to confirm data is flowing properly to the Pi.
+3. Run the [IMU example script](https://github.com/lucastliu/sciencebot/blob/master/imu/example.py) to confirm data is flowing properly to the Pi.
 
 
-    Note: IMU data is much better when properly calibrated, though heading data is still usable even without calibration. Calibration is achieved automatically by moving the vehicle/sensor in [predefined motion sequences](https://www.mathworks.com/help/supportpkg/arduino/ref/bno055imusensor.html) (see the "More About" section). 
-    
-    Calibration status can be accessed in the same way as other sensor fields in the example script. The two relevant metrics are `sensor.calibration_status` (3 being the best) and `self.sensor.calibrated` (A boolean value for whether all calibration is complete).
+Note: IMU data is much better when properly calibrated, though heading data is still usable even without calibration. Calibration is achieved automatically by moving the vehicle/sensor in [predefined motion sequences](https://www.mathworks.com/help/supportpkg/arduino/ref/bno055imusensor.html) (see the "More About" section). 
 
-    User beware: The IMU will initially set whichever heading it is pointed to as "heading zero," but will automatically adjust itself to true due east as zero as it calibrates. Clockwise rotation corresponds to larger angles, which are given in degrees. Wrap-around to zero at 360 degrees (though occasionally the IMU will give readings up to 370). Make sure to convert to your appropriate co-ordinate system.
+Calibration status can be accessed in the same way as other sensor fields in the example script. The two relevant metrics are `sensor.calibration_status` (3 being the best) and `self.sensor.calibrated` (A boolean value for whether all calibration is complete).
+
+User beware: The IMU will initially set whichever heading it is pointed to as "heading zero," but will automatically adjust itself to true due east as zero as it calibrates. Clockwise rotation corresponds to larger angles, which are given in degrees. Wrap-around to zero at 360 degrees (though occasionally the IMU will give readings up to 370). Make sure to convert to your appropriate co-ordinate system.
 
 #### DWM1001
 
 ![dwm][dwm]
 
-      Follow the [Quick Deployment Guide](https://www.decawave.com/wp-content/uploads/2019/03/DWM1001_Gateway_Quick_Deployment_Guide.pdf)
+Follow the [Quick Deployment Guide](https://www.decawave.com/wp-content/uploads/2019/03/DWM1001_Gateway_Quick_Deployment_Guide.pdf)
 
 
-      The guide is very extensive, so here are some important highlights:
+The guide is very extensive, so here are some important highlights:
 
-      1. Make sure each DWM has up to date firmware, as described on page 9 of the guide.
+1. Make sure each DWM has up to date firmware, as described on page 9 of the guide.
 
-      2. Main interest is to USB hookup each DWM to a computer, and use TeraTerm to program each DWM in UART mode. Instructions for this start on page 11 of the Quick Deployment Guide. You will need a minimum a DWM configured for tag mode (the one on the vehicle), an initator DWM, and at least 2 anchor DWMs. You must program the x,y,z (arbitrary origin) of the initiator and anchors, then place the modules in your physical space accordingly.
+2. Main interest is to USB hookup each DWM to a computer, and use TeraTerm to program each DWM in UART mode. Instructions for this start on page 11 of the Quick Deployment Guide. You will need a minimum a DWM configured for tag mode (the one on the vehicle), an initator DWM, and at least 2 anchor DWMs. You must program the x,y,z (arbitrary origin) of the initiator and anchors, then place the modules in your physical space accordingly.
 
 ![dwms][dwms]
 
-      It tends to be easiest to set one DWM position at the origin, and place the other tags relative to the origin DWM.
+It tends to be easiest to set one DWM position at the origin, and place the other tags relative to the origin DWM.
 
 
-      3. After initial setup, we communicate from the Pi using [this API]( https://www.decawave.com/sites/default/files/dwm1001-api-guide.pdf). In particular, we use the `lec` mode (see API page 63) to get positioning data.
-        
+3. After initial setup, we communicate from the Pi using [this API]( https://www.decawave.com/sites/default/files/dwm1001-api-guide.pdf). In particular, we use the `lec` mode (see API page 63) to get positioning data.
+    
 
 #### OpenMV Cam H7 (Optional)
 
 ![camh7][camh7]
 
-    Cameras are attached to 3D printed mounts. Wire micro-usb cable to Pi's USB ports (USB provides channel for Data and power).
+Cameras are attached to 3D printed mounts. Wire micro-usb cable to Pi's USB ports (USB provides channel for Data and power).
 
-    Camera lens can be swapped out for different FOV and other properties. Standard M2 Lens mount.
+Camera lens can be swapped out for different FOV and other properties. Standard M2 Lens mount.
 
 ## Testing & Troubleshooting
 
