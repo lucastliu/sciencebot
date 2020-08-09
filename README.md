@@ -11,7 +11,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/lucastliu/sciencebot">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="images/bot34.jpg" alt="Logo" width="426" height="328">
   </a>
 
   <h3 align="center">sciencebot</h3>
@@ -60,17 +60,38 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
+## Software Technologies
+
+* Raspbian Buster OS
+* Arduino
+* Python
+* C++
+* ROS2 Eloquent Elusor
+
+
+## Project Structure
+The `dev_ws` folder contains a full ROS2 based implementation of the vehicle control project.
+
+within `dev_ws`, source code is organized into packages under the `src` folder
+
+Other folders contain basic standalone scripts for individual components (not tied to ROS2 in any way).
+
+See seperate [Hardware Documentation](https://github.com/lucastliu/sciencebot/HARDWARE.md) for details on the physical vehicle build, and sensor information
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-To get a local copy up and running follow these simple steps.
-
 ### Prerequisites
+
+
 
 #### Raspberry Pi
 
-This project was developed on a Raspberry Pi 3B+ running Raspian Buster. Setups that use other Pi hardware or OS versions, or even other Linux devices, will likely operate in a highly similar fashion, but not in the exact same manner.
+  This project was developed on a Raspberry Pi 3B+ running Raspian Buster. Setups that use other Pi hardware or OS versions, or even other Linux devices, will likely operate in a highly similar fashion, but not in the exact same manner.
+
+0. Python 3
+
+    This project requires Python 3. This should be available by default on the Pi with Raspbian Buster.
 
 1. Storage
 
@@ -91,9 +112,42 @@ This project was developed on a Raspberry Pi 3B+ running Raspian Buster. Setups 
 
     If the resulting resolution on your host device does not look right, you may need to [adjust the resolution](https://help.realvnc.com/hc/en-us/articles/360002249917-VNC-Connect-and-Raspberry-Pi#troubleshooting-vnc-server-0-7).
 
+#### BNO055 IMU
 
-#### Python 3
-This project requires Python 3. This should be available by default on the Pi with Raspbian Buster.
+  Communicating with the IMU is done through the [Adafruit_CircuitPython_BNO055 Library](https://github.com/adafruit/Adafruit_CircuitPython_BNO055)
+
+  The Raspberry Pi is also not compatible with the IMU by default due to clock stretching issues. This can be remedied by [switching the Pi to a software implementation of i2c](https://gps-pie.com/pi_i2c_config.htm). This may have negative effects on other sensors that use i2c.
+
+#### DWM1001
+
+  Programming our DWM1001 positioning sensors requires pyserial, which can be acquired by opening a terminal and running
+
+  ```sh
+  pip install pyserial
+  ```
+  
+  Programming DWM1001 Modules can be done through [TeraTerm](https://osdn.net/projects/ttssh2/releases/).
+
+  Follow the [Quick Deployment Guide](https://www.decawave.com/wp-content/uploads/2019/03/DWM1001_Gateway_Quick_Deployment_Guide.pdf) for software installation requirements. Refer to this repository's HARDWARE guide for full details. If you have an Android device, see the guide for remote programming using Android.
+
+#### OpenMV Cam H7 (Optional)
+
+  Not currently integrated in project, but has standalone functionality.
+
+  [OpenMV IDE](https://openmv.io/pages/download)
+
+  [OpenMV Documentation](https://docs.openmv.io/)
+
+  Upload `camera_constants.py` and `main.py` (Files available in camera/h7 folder) to device using USB cable.
+
+#### Arduino
+
+  The Arduino is our motor microcontroller, solely in charge of sending PWM signals to our motors. 
+
+  [Download Arduino IDE](https://www.arduino.cc/en/main/software)
+
+  Our microcontroller code also requires downloading the [AFMOTOR support library](https://learn.adafruit.com/adafruit-motor-shield/library-install)
+
 
 #### ROS2 Eloquent Elusor
 
@@ -108,16 +162,21 @@ The build process may require several attempts, as ROS does not have Tier 1 supp
 ```sh
 MAKEFLAGS="-j1 -l1" colcon build  --executor sequential
 ```
+Installing ROS2 may take a considerable amount of time.
+
+
 
 ### Installation
  
-1. Clone sciencebot
+1. On the Pi, open a terminal and clone sciencebot
 ```sh
 git clone https://github.com/lucastliu/sciencebot.git
 ```
-2. [Create an ROS workspace](https://index.ros.org/doc/ros2/Tutorials/Workspace/Creating-A-Workspace/) under dev_ws. Pay special attention to sourcing the overlay and underlay.
+2. Using the Arduino IDE, Upload [SerialMotor.ino](https://github.com/lucastliu/sciencebot/blob/master/motors/SerialMotor/SerialMotor.ino) to the Arduino
 
-3. Build the project
+3. [Create an ROS workspace](https://index.ros.org/doc/ros2/Tutorials/Workspace/Creating-A-Workspace/) under dev_ws. Pay special attention to sourcing the overlay and underlay.
+
+4. Build the project
 ```sh
 cd .../dev_ws/src
 ```
@@ -187,7 +246,40 @@ If you have chosen good parameters, the turtle will move to the desired setpoint
 
 ### sciencebot
 
+Running of the sciencebot requires the relevant hardware components to be installed, as described in [HARDWARE](https://github.com/lucastliu/sciencebot/blob/master/HARDWARE.md)
 
+Complete Spin up steps.
+
+Run the launch file
+
+```sh
+ros2 launch nav pose.launch.py
+```
+If sensors are correctly hooked up, the terminal should begin displaying position and heading.
+
+Open a new terminal, and complete the spin up steps.
+
+Run the vehicle controller node of your choice, i.e.
+```sh
+ros2 run nav bang2
+```
+
+Open a new terminal, complete the spin up steps.
+
+Run the request client script
+
+```sh
+python3 ./src/nav/nav/clients/run_position_pid_client.py
+```
+input your desired destination
+```sh
+Desired X Y: 1.5 1.5
+```
+
+The vehicle should begin moving to the waypoint in accordance with controller node policy.
+
+
+## Tuning, Modifying, & Additions
 
 ## Helpful Tips
 
@@ -201,6 +293,17 @@ If you have chosen good parameters, the turtle will move to the desired setpoint
 
 [Raspberry Pi Forums](https://www.raspberrypi.org/forums/)
 
+
+
+## Future
+
+* H7 Camera Computer Vision Integration
+
+* 3D printed components redesign
+
+* Advanced Sensor Fusion
+
+* Drivetrain change
 
 <!-- CONTRIBUTING -->
 ## Contributing
