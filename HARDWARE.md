@@ -35,7 +35,20 @@ Guide for the physical vehicle construction, as well as sensor information
 See seperate [Main README](https://github.com/lucastliu/sciencebot/README.md) for overview and software documentation.
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
-TODO
+- [Hardware Details](#hardware-details)
+  * [Table of Contents](#table-of-contents)
+  * [Hardware Technologies](#hardware-technologies)
+  * [Images](#images)
+  * [Getting Started](#getting-started)
+    + [Prerequisites](#prerequisites)
+    + [Installation](#installation)
+      - [Raspberry Pi](#raspberry-pi)
+      - [Wheels](#wheels)
+      - [Arduino Motor Microcontroller](#arduino-motor-microcontroller)
+      - [BNO055 IMU](#bno055-imu)
+      - [DWM1001](#dwm1001)
+      - [OpenMV Cam H7 (Optional)](#openmv-cam-h7--optional-)
+  * [Testing & Troubleshooting](#testing---troubleshooting)
 
 ## Hardware Technologies
 * [Raspberry Pi 3B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/)
@@ -71,7 +84,7 @@ Gather parts. Acquire appropriate screwdriver. Multimeter also useful for debugg
 
 ### Installation
 
-1. Raspberry Pi
+#### Raspberry Pi
 
     The Raspberry Pi is the central brain of the vehicle. All other components will be hooked up to the Pi.
 
@@ -85,7 +98,7 @@ Gather parts. Acquire appropriate screwdriver. Multimeter also useful for debugg
 
 
  
-2. Wheels
+#### Wheels
 
     Attach wheel to motor shaft. Place thread ziptie through motor and chassis base. Hand dexterity required here. "Pre-bending" the ziptie before threading can make this easier. 
     ![botbottomfit][bot_fitting]
@@ -94,7 +107,7 @@ Gather parts. Acquire appropriate screwdriver. Multimeter also useful for debugg
     ![botbottom2][bot_bottom_2]
 
 
-3. Motor Microcontroller
+#### Arduino Motor Microcontroller
 
     Our Arduino Uno will serve as the motor microcontroller. Attatch the motor shield to the Arduino, and wire the motors to the shield.
 
@@ -108,7 +121,7 @@ Gather parts. Acquire appropriate screwdriver. Multimeter also useful for debugg
     Test the motors by running `motor_test.py` (located under motors folder) on the Pi. Note the direction of spin for each wheel. Adjust the code in the Arduino `SerialMotor.ino` file, or the `SerialMotor.py` file to correct. Note that these files exist in the standalone motors folder, but also under dev_ws/src/nav/nav/motors for the ROS2 implementation. Changes need to be made in the dev_ws subdirectory to take effect for the ROS implementation. Same goes for the standalone.
 
 
-4. BNO055 IMU
+#### BNO055 IMU
     ![imu][imu]
     1. Connect the Power, Ground, SCL, and SDA pins to the correct pinouts on the Pi. [Sensor Pinouts](https://learn.adafruit.com/adafruit-bno055-absolute-orientation-sensor/pinouts)
 
@@ -123,7 +136,7 @@ Gather parts. Acquire appropriate screwdriver. Multimeter also useful for debugg
 
     User beware: The IMU will initially set whichever heading it is pointed to as "heading zero," but will automatically adjust itself to true due east as zero as it calibrates. Clockwise rotation corresponds to larger angles, which are given in degrees. Wrap-around to zero at 360 degrees (though occasionally the IMU will give readings up to 370). Make sure to convert to your appropriate co-ordinate system.
 
-5. DWM1001
+#### DWM1001
 
     ![dwm][dwm]
 
@@ -144,7 +157,7 @@ Gather parts. Acquire appropriate screwdriver. Multimeter also useful for debugg
       3. After initial setup, we communicate from the Pi using [this API]( https://www.decawave.com/sites/default/files/dwm1001-api-guide.pdf). In particular, we use the `lec` mode (see API page 63) to get positioning data.
         
 
-6. OpenMV Cam H7 (Optional)
+#### OpenMV Cam H7 (Optional)
 
     ![camh7][camh7]
 
@@ -180,3 +193,6 @@ If the motors seem to continually spin (likely from the last motor command befor
 [dwms]: images/dwms.png
 [camh7]: images/camh7.png
 [imu]: images/imu.png
+[license-shield]: https://img.shields.io/badge/License-GPLv3-blue.svg
+[license-url]: https://github.com/lucastliu/sciencebot/LICENSE.txt
+[product-screenshot]: images/screenshot.png
