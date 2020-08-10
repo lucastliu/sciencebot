@@ -67,9 +67,9 @@
 
 This open-source project is a venture into designing a research vehicle platform which is:
 
-1. Adaptable: Capable of supporting a wide variety of hardware payloads
+1. Capable: Able to carry out complex goals and tasks
 2. Economical: Pushes functional limits without using overly-expensive components
-3. Extensible: Can be easily modified and improved upon to complete new missions and incorporate additional features
+3. Extensible: Can be easily modified (software & hardware payloads) to complete new missions and incorporate additional features
 
 ## Software Technologies
 
