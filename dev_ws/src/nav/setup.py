@@ -36,8 +36,8 @@ setup(
             'imupid = nav.vehicle_controllers.imu_pid:main',
             'bturn = nav.vehicle_controllers.bturn:main',
             'bang = nav.vehicle_controllers.bang:main',
-            'bang2 = nav.vehicle_controllers.bang2:main',
-            'bang3 = nav.vehicle_controllers.bang3:main',
+            'mixed = nav.vehicle_controllers.mixed:main',
+            'discrete = nav.vehicle_controllers.discrete:main',
         ],
     },
 )

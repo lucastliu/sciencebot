@@ -272,7 +272,7 @@ Open a new terminal, and complete the spin up steps.
 
 Run the vehicle controller node of your choice, i.e.
 ```sh
-ros2 run nav bang2
+ros2 run nav mixed
 ```
 
 Open a new terminal, complete the spin up steps.

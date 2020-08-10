@@ -14,10 +14,14 @@ from nav.motors.SerialMotor import SerialMotor
 from nav.controller_base import ControllerBase
 
 
-class Bang(ControllerBase):
+class Discrete(ControllerBase):
+    """
+    Controller implementation with
+    completely discrete angular and linear control
+    """
 
     def __init__(self):
-        super().__init__('bang2', Pose, 'pose', MoveTo, 'move_to')
+        super().__init__('bang3', Pose, 'pose', MoveTo, 'move_to')
 
         self.sm = SerialMotor("/dev/ttyACM1")
 
@@ -25,6 +29,7 @@ class Bang(ControllerBase):
         self.y_dest = 0.0
         self.r = 99.99
         self.old = [0.0, 0.0]
+        self.old2 = [0, 0]
         self.curr = [0.0, 0.0]
         self.twist = Twist()
         self.T = 0.0
@@ -43,23 +48,20 @@ class Bang(ControllerBase):
         self.r = self.get_distance()
         self.get_logger().info('Start r: {0}'.format(self.r))
         self.old = [0, 0]
+        self.old2 = [0, 0]
         self.curr = [0, 0]
-        self.T = 0.0
 
         feedback_msg = MoveTo.Feedback()
 
-        while self.r > 0.15:
+        while self.r > 0.2:
 
             # calculate errors
-            self.r = self.get_distance()
-            # make adjustments to motors instructions
-            self.linear_correction()
-
             self.calculate_closest_turn()
-            self.angular_correction()
+            self.r = self.get_distance()
 
-            # send new commands to motors
-            self.move()
+            # make adjustments
+            self.angular_correction()
+            self.linear_correction()
 
             # give feedback
             feedback_msg.x_curr = self.x
@@ -75,40 +77,39 @@ class Bang(ControllerBase):
         result = MoveTo.Result()
         result.x_final = self.x
         result.y_final = self.y
-        self.get_logger().info('Finished Move To')
+        self.get_logger().info('Finish Move To')
 
         return result
 
-    def move(self):
+    def move(self, T):
         self.smoothing()
-        print("Move Speed: {}".format(str(self.curr)))
-        if(abs(self.curr[0]) > 1 or abs(self.curr[1]) > 1):
-            print('bad motor limit')
-            print(str(self.curr))
-            return
+        print("Move: {}".format(str(self.curr)))
         self.sm.set_motor(3, self.curr[0])  # left
         self.sm.set_motor(4, self.curr[1])  # right
-        time.sleep(self.T)
+
+        time.sleep(T)
 
     def smoothing(self):
-        self.curr[0] = .15*self.old[0] + .85*self.curr[0]
-        self.curr[1] = .15*self.old[1] + .85*self.curr[1]
-        self.old = self.curr  # update old
+        self.curr[0] = .05*self.old2[0] + .1*self.old[0] + .85*self.curr[0]
+        self.curr[1] = .05*self.old2[1] + .1*self.old[1] + .85*self.curr[1]
+        self.old2 = self.old
+        self.old = self.curr
 
     def linear_smooth(self, d):
-        d *= .7
-
-        if d > .7:
-            return .7
-        elif d < .1:
-            return .1
+        if d > 1:
+            return 1
+        elif d < .6:
+            return .6
         else:
             return d
 
     def angular_smooth(self, a):
-        y = 1 - (a / (math.pi*20))
-        if y > .7:
-            return .7
+        return .6
+        y = a / math.pi
+        if y > .6:
+            return .6
+        if y < .4:
+            return .4
         return y
 
     def linear_correction(self):
@@ -116,30 +117,26 @@ class Bang(ControllerBase):
         speed = self.linear_smooth(self.r)
         print("Initial Speed: {}".format(speed))
         self.curr = [speed, speed]
+        T = self.r / 4
+        if T < .05:
+            T = .05
+        self.move(T)
 
     def angular_correction(self):
-        if abs(self.angle_diff) > (math.pi / 10):  # focus on turning entirely
-            print('ANGULAR')
-            spin = .6
+        while abs(self.angle_diff) > (math.pi / 30):
+            self.calculate_closest_turn()
+
+            spin = self.angular_smooth(abs(self.angle_diff))
+            print("Spin: {}".format(spin))
             if self.angle_diff < 0:
-                self.curr = [spin, -1 * spin]
+                self.curr[0] = spin
+                self.curr[1] = -1*spin
+
             else:
-                self.curr = [-1 * spin, spin]
+                self.curr[0] = -1*spin
+                self.curr[1] = spin
 
-            self.T = .05
-
-        else:
-            print('LINEAR')
-            pull = self.angular_smooth(abs(self.angle_diff))
-            if self.angle_diff > 0:
-                self.curr[1] *= pull
-            else:
-                self.curr[0] *= pull
-
-            # set duration of instruction
-            self.T = self.r / 4
-            if self.T < .02:
-                self.T = .02
+            self.move(.05)
 
 
 def main(args=None):

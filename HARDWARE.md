@@ -87,7 +87,7 @@ Gather parts. Acquire appropriate screwdriver. Multimeter also useful for debugg
 
 #### Base Chassis, Mounts & Wheels
 
-The basic frame, as well as modular mount pieces and the wheels of the sciencebot are 3D printed. Many components have 2mm holes arranged in grid fashion, which are great for making components adaptable and modular. Connections can be made with M2 screws, zipties, or with other parts. A variety of parts are provided under the `3D_parts` folder, but also feel free to make your own!
+The basic frame, as well as modular mount pieces and the wheels of the sciencebot are 3D printed. Many components have 2mm holes arranged in grid fashion, which are great for making components adaptable and modular. Connections can be made with M2 screws, zipties, or with other parts. A variety of parts are provided under the [3D_parts folder](https://github.com/lucastliu/sciencebot/tree/master/3D_parts), but also feel free to make your own!
 
 In addition, here are some links to OnShape files for the 3D parts:
 
