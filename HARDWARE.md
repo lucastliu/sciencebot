@@ -85,6 +85,19 @@ Gather parts. Acquire appropriate screwdriver. Multimeter also useful for debugg
 
 ### Installation
 
+#### Base Chassis, Mounts & Wheels
+
+The basic frame, as well as modular mount pieces and the wheels of the sciencebot are 3D printed. Many components have 2mm holes arranged in grid fashion, which are great for making components adaptable and modular. Connections can be made with M2 screws, zipties, or with other parts. A variety of parts are provided under the `3D_parts` folder, but also feel free to make your own!
+
+In addition, here are some links to OnShape files for the 3D parts:
+
+[Base](https://cad.onshape.com/documents/a6b3f805fb03e809b82d1add/w/56e20282fa9ed432ed0b3781/e/dcdab560d54729ee209a3d05)
+
+[Additional Mounts](https://cad.onshape.com/documents/7904cea1c97a22124acc52eb/w/d508e8c8701c0da82f3e15ee/e/760d4528fb9caa9cfacff0b7)
+
+[Additional Generics](https://cad.onshape.com/documents/96bc3dd7c7456dd4e1d48dcb/w/7a2bb739f9d9a8153bb0c78c/e/8193ef8f2d9a02fdaa290d24)
+
+
 #### Raspberry Pi
 
 The Raspberry Pi is the central brain of the vehicle. All other components will be hooked up to the Pi.
@@ -148,7 +161,7 @@ The guide is very extensive, so here are some important highlights:
 
 1. Make sure each DWM has up to date firmware, as described on page 9 of the guide.
 
-2. Main interest is to USB hookup each DWM to a computer, and use TeraTerm to program each DWM in UART mode. Instructions for this start on page 11 of the Quick Deployment Guide. You will need a minimum a DWM configured for tag mode (the one on the vehicle), an initator DWM, and at least 2 anchor DWMs. You must program the x,y,z (arbitrary origin) of the initiator and anchors, then place the modules in your physical space accordingly.
+2. Our main interest is to USB hookup each DWM to a computer, and use TeraTerm to program each DWM in UART mode. Instructions for this start on page 11 of the Quick Deployment Guide. You will need at minimum a DWM configured for tag mode (the one on the vehicle), an initator DWM, and at least 2 anchor DWMs. You must program the x,y,z (arbitrary origin) of the initiator and anchors, then place the modules in your physical space accordingly.
 
 ![dwms][dwms]
 
