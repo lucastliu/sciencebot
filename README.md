@@ -17,7 +17,7 @@
   <h3 align="center">sciencebot</h3>
 
   <p align="center">
-    A modular low-cost research vehicle platform
+    A modular & economical research vehicle platform
     <br />
     <a href="https://github.com/lucastliu/sciencebot/wiki"><strong>Explore the wiki »</strong></a>
     <br />
@@ -65,7 +65,11 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+This open-source project is a venture into designing a research vehicle platform which is:
+
+1. Adaptable: Capable of supporting a wide variety of hardware payloads
+2. Economical: Pushes functional limits without using overly-expensive components
+3. Extensible: Can be easily modified and improved upon to complete new missions and incorporate additional features
 
 ## Software Technologies
 

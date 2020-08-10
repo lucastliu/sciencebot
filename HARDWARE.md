@@ -29,26 +29,27 @@ A modular low-cost research vehicle platform
 </p>
 
 
+
 # Hardware Details
 
 Guide for the physical vehicle construction, as well as sensor information
 See seperate [Main README](https://github.com/lucastliu/sciencebot/blob/master/README.md) for overview and software documentation.
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
-- [Hardware Details](#hardware-details)
-* [Table of Contents](#table-of-contents)
-* [Hardware Technologies](#hardware-technologies)
-* [Images](#images)
-* [Getting Started](#getting-started)
-+ [Prerequisites](#prerequisites)
-+ [Installation](#installation)
-    - [Raspberry Pi](#raspberry-pi)
-    - [Wheels](#wheels)
-    - [Arduino Motor Microcontroller](#arduino-motor-microcontroller)
-    - [BNO055 IMU](#bno055-imu)
-    - [DWM1001](#dwm1001)
-    - [OpenMV Cam H7 (Optional)](#openmv-cam-h7--optional-)
-* [Testing & Troubleshooting](#testing---troubleshooting)
+- [Table of Contents](#table-of-contents)
+- [Hardware Technologies](#hardware-technologies)
+- [Images](#images)
+- [Getting Started](#getting-started)
+  * [Prerequisites](#prerequisites)
+  * [Installation](#installation)
+    + [Raspberry Pi](#raspberry-pi)
+    + [Wheels](#wheels)
+    + [Arduino Motor Microcontroller](#arduino-motor-microcontroller)
+    + [BNO055 IMU](#bno055-imu)
+    + [DWM1001](#dwm1001)
+    + [OpenMV Cam H7 (Optional)](#openmv-cam-h7--optional-)
+- [Testing & Troubleshooting](#testing---troubleshooting)
+
 
 ## Hardware Technologies
 * [Raspberry Pi 3B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/)
