@@ -5,32 +5,29 @@
 
 [![GPLv3 License][license-shield]][license-url]
 
-
-
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-<a href="https://github.com/lucastliu/sciencebot">
-<img src="images/bot34.jpg" alt="Logo" width="426" height="328">
-</a>
+  <a href="https://github.com/lucastliu/sciencebot">
+    <img src="images/bot34.jpg" alt="Logo" width="426" height="328">
+  </a>
 
-<h3 align="center">sciencebot</h3>
+  <h3 align="center">sciencebot</h3>
 
-<p align="center">
-A modular low-cost research vehicle platform
-<br />
-<a href="https://github.com/lucastliu/sciencebot/wiki"><strong>Explore the wiki »</strong></a>
-<br />
-<br />
-<a href="https://github.com/lucastliu/sciencebot">View Demo</a>
-·
-<a href="https://github.com/lucastliu/sciencebot/issues">Request Feature</a>
+  <p align="center">
+    A modular & economical research vehicle platform
+    <br />
+    <a href="https://github.com/lucastliu/sciencebot/wiki">Wiki</a>
+    ·
+    <a href="https://github.com/lucastliu/sciencebot/blob/master/README.md">Software</a>
+    ·
+    <a href="https://github.com/lucastliu/sciencebot/issues">Request Feature</a>
+  </p>
 </p>
-</p>
 
 
 
-# Hardware Details
+# Hardware
 
 Guide for the physical vehicle construction, as well as sensor information
 See seperate [Main README](https://github.com/lucastliu/sciencebot/blob/master/README.md) for overview and software documentation.

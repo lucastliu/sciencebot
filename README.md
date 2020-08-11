@@ -6,7 +6,6 @@
 [![GPLv3 License][license-shield]][license-url]
 
 
-
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
@@ -19,16 +18,15 @@
   <p align="center">
     A modular & economical research vehicle platform
     <br />
-    <a href="https://github.com/lucastliu/sciencebot/wiki"><strong>Explore the wiki »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/lucastliu/sciencebot">View Demo</a>
+    <a href="https://github.com/lucastliu/sciencebot/wiki">Wiki</a>
+    ·
+    <a href="https://github.com/lucastliu/sciencebot/blob/master/HARDWARE.md">Hardware</a>
     ·
     <a href="https://github.com/lucastliu/sciencebot/issues">Request Feature</a>
   </p>
 </p>
 
-
+# Software
 
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
@@ -58,20 +56,9 @@
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
-- [Acknowledgements](#acknowledgements)
 
 
-
-<!-- ABOUT THE PROJECT -->
-## About The Project
-
-This open-source project is a venture into designing a research vehicle platform which is:
-
-1. Capable: Able to carry out complex goals and tasks
-2. Economical: Pushes functional limits without using overly-expensive components
-3. Extensible: Can be easily modified (software & hardware payloads) to complete new missions and incorporate additional features
-
-## Software Technologies
+## Technologies
 
 * Raspbian Buster OS
 * Arduino
@@ -358,12 +345,6 @@ Your Name  - lucas.liu@duke.edu
 
 Project Link: [https://github.com/lucastliu/sciencebot](https://github.com/lucastliu/sciencebot)
 
-
-
-<!-- ACKNOWLEDGEMENTS -->
-## Acknowledgements
-
-Special thanks to Dr. Tyler Bletsch for his mentorship during this project
 
 
 
