@@ -29,8 +29,8 @@
 
 # Hardware
 
-Guide for the physical vehicle construction, as well as sensor information
-See seperate [Main README](https://github.com/lucastliu/sciencebot/blob/master/README.md) for overview and software documentation.
+Guide for physical vehicle construction, as well as sensor information.
+
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
 - [Table of Contents](#table-of-contents)
