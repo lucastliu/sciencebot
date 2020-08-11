@@ -66,7 +66,7 @@ See seperate [Main README](https://github.com/lucastliu/sciencebot/blob/master/R
 * [USB Cable Type A/B](https://store.arduino.cc/usa/usb-2-0-cable-type-a-b)
 * [USB to USB Micro Cable](https://www.amazon.com/AmazonBasics-Male-Micro-Cable-Black/dp/B0711PVX6Z) x8
 * 3D Printed Chassis, Wheels, Components
-* Assorted wires, M2 screws / nuts, zipties, command strips, etc
+* Assorted wires, M3 screws / nuts, zipties, command strips, etc
 
 ## Images
 ![bot][bot34]
@@ -87,7 +87,7 @@ Gather parts. Acquire appropriate screwdriver. Multimeter also useful for debugg
 
 #### Base Chassis, Mounts & Wheels
 
-The basic frame, as well as modular mount pieces and the wheels of the sciencebot are 3D printed. Many components have 2mm holes arranged in grid fashion, which are great for making components adaptable and modular. Connections can be made with M2 screws, zipties, or with other parts. A variety of parts are provided under the [3D_parts folder](https://github.com/lucastliu/sciencebot/tree/master/3D_parts), but also feel free to make your own!
+The basic frame, as well as modular mount pieces and the wheels of the sciencebot are 3D printed. Many components have 3mm holes arranged in grid fashion, which are great for making components adaptable and modular. Connections can be made with M3 screws, zipties, or with other parts. A variety of parts are provided under the [3D_parts folder](https://github.com/lucastliu/sciencebot/tree/master/3D_parts), but also feel free to make your own!
 
 In addition, here are some links to OnShape files for the 3D parts:
 
