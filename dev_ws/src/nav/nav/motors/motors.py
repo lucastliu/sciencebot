@@ -70,8 +70,8 @@ class Motors(Node):
         self.get_logger().info('Power Right: %.3f Left: %.3f' %
                                (right_power, left_power))
 
-        self.sm.set_motor(4, right_power)
-        self.sm.set_motor(3, left_power)
+        self.sm.set_motor(3, right_power)
+        self.sm.set_motor(4, left_power)
 
 
 def main(args=None):

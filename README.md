@@ -247,6 +247,28 @@ If you have chosen good parameters, the turtle will move to the desired setpoint
 
 Running of the sciencebot requires the relevant hardware components to be installed, as described in [HARDWARE](https://github.com/lucastliu/sciencebot/blob/master/HARDWARE.md)
 
+#### Manual Drive
+
+Follow these steps to manually drive the vehicle with a keyboard.
+
+Complete Spin Up steps.
+
+Run the motor node
+
+```sh
+ros2 run nav motors
+```
+
+Open a second terminal, and complete Spin up steps.
+
+Run the teleop node
+
+```sh
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+```
+
+Begin driving. See [teleop twist keyboard](https://github.com/lucastliu/sciencebot/tree/master/dev_ws/src/teleop_twist_keyboard) for additional drive details.
+
 #### Automatic Waypoint Seeking
 Complete Spin up steps.
 
@@ -278,10 +300,6 @@ Desired X Y: 1.5 1.5
 
 The vehicle should begin moving to the waypoint in accordance with controller node policy.
 
-#### Manual Drive
-
-Follow these steps to manually drive the vehicle with a keyboard.
-TODO
 
 #### PlotJuggler
 

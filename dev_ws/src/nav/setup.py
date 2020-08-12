@@ -20,7 +20,7 @@ setup(
     zip_safe=True,
     maintainer='Lucas Liu',
     maintainer_email='lucas.liu@duke.edu',
-    description='Autobot navigational package',
+    description='sciencebot navigational package',
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
