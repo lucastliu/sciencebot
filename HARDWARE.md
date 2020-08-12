@@ -9,7 +9,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/lucastliu/sciencebot">
-    <img src="images/bot34.jpg" alt="Logo" width="426" height="328">
+    <img src="images/bot34.png" alt="sciencebot" width="300" height="350">
   </a>
 
   <h3 align="center">sciencebot</h3>
@@ -65,15 +65,14 @@ Guide for physical vehicle construction, as well as sensor information.
 * 3D Printed Chassis, Wheels, Components
 * Assorted wires, M3 screws / nuts, zipties, command strips, etc
 
-## Images
-![bot][bot34]
+## Overview Shots
 ![botside][bot_side_1]
 ![botside2][bot_side_2]
 ![botbottom][bot_bottom]
+![bottop][bottop]
 
 <!-- GETTING STARTED -->
 ## Getting Started
-
 
 
 ### Prerequisites
@@ -95,6 +94,15 @@ In addition, here are some links to OnShape files for the 3D parts:
 [Additional Generics](https://cad.onshape.com/documents/96bc3dd7c7456dd4e1d48dcb/w/7a2bb739f9d9a8153bb0c78c/e/8193ef8f2d9a02fdaa290d24)
 
 
+#### Wheels
+
+Attach wheel to motor shaft. Place thread ziptie through motor and chassis base. Hand dexterity required here. "Pre-bending" the ziptie before threading can make this easier. 
+![botbottomfit][bot_fitting]
+![botbottom1][bot_bottom_1]
+Thread power and ground wires from motor through chassis. Repeat for all wheels.
+![botbottom2][bot_bottom_2]
+
+
 #### Raspberry Pi
 
 The Raspberry Pi is the central brain of the vehicle. All other components will be hooked up to the Pi.
@@ -107,30 +115,21 @@ Alternatively, one can power the Pi through the 18650s by wiring the 12V battery
 
 ![converter][converter]
 
-
-
-#### Wheels
-
-Attach wheel to motor shaft. Place thread ziptie through motor and chassis base. Hand dexterity required here. "Pre-bending" the ziptie before threading can make this easier. 
-![botbottomfit][bot_fitting]
-![botbottom1][bot_bottom_1]
-Thread power and ground wires from motor through chassis. Repeat for all wheels.
-![botbottom2][bot_bottom_2]
-
-
 #### Arduino Motor Microcontroller
 
-Our Arduino Uno will serve as the motor microcontroller. Attatch the motor shield to the Arduino, and wire the motors to the shield.
+Our Arduino Uno will serve as the motor microcontroller. Attatch the motor shield to the Arduino, and wire the motors to the shield. using the USB A/B Cable, connect the Arduino to the Raspberry Pi.
+![ardfront][ardfront]
 
-![ard1][ard1]
+The Pi and Arduino are vertically mounted on the base
 
-using the USB A/B Cable, connect the Arduino to the Raspberry Pi.
+![ardside][ardside]
 
-![ard2][ard2]
+
 
 
 Test the motors by running `motor_test.py` (located under motors folder) on the Pi. Note the direction of spin for each wheel. Adjust the code in the Arduino `SerialMotor.ino` file, or the `SerialMotor.py` file to correct. Note that these files exist in the standalone motors folder, but also under dev_ws/src/nav/nav/motors for the ROS2 implementation. Changes need to be made in the dev_ws subdirectory to take effect for the ROS implementation. Same goes for the standalone.
 
+![botmin][botmin]
 
 #### BNO055 IMU
 ![imu][imu]
@@ -158,7 +157,7 @@ The guide is very extensive, so here are some important highlights:
 
 1. Make sure each DWM has up to date firmware, as described on page 9 of the guide.
 
-2. Our main interest is to USB hookup each DWM to a computer, and use TeraTerm to program each DWM in UART mode. Instructions for this start on page 11 of the Quick Deployment Guide. You will need at minimum a DWM configured for tag mode (the one on the vehicle), an initator DWM, and at least 2 anchor DWMs. You must program the x,y,z (arbitrary origin) of the initiator and anchors, then place the modules in your physical space accordingly.
+2. Our main interest is to USB hookup each DWM to a computer, and use TeraTerm to program each DWM in UART mode. Instructions for this start on page 11 of the Quick Deployment Guide. You will need at minimum a DWM configured for tag mode (the one on the vehicle), an initator DWM, and at least 2 anchor DWMs. You must program the x,y,z (arbitrary origin) of the initiator and anchors, then place the modules in your physical space accordingly. Orient all DWMs as shown in the picture, with the blue-colored "protrusion" at the top of the module.
 
 ![dwms][dwms]
 
@@ -168,11 +167,13 @@ It tends to be easiest to set one DWM position at the origin, and place the othe
 3. After initial setup, we communicate from the Pi using [this API]( https://www.decawave.com/sites/default/files/dwm1001-api-guide.pdf). In particular, we use the `lec` mode (see API page 63) to get positioning data.
     
 
-#### OpenMV Cam H7 (Optional)
+#### OpenMV Cam H7
 
 ![camh7][camh7]
 
 Cameras are attached to 3D printed mounts. Wire micro-usb cable to Pi's USB ports (USB provides channel for Data and power).
+
+![cam][cam]
 
 Camera lens can be swapped out for different FOV and other properties. Standard M2 Lens mount.
 
@@ -191,19 +192,26 @@ If the motors seem to continually spin (likely from the last motor command befor
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[bot34]: images/bot34.jpg
-[bot_front]: images/botfront.jpg
+[bot34]: images/bot34.png
+[bot_front]: images/botfront.png
 [bot_side_1]: images/botside1.jpg
 [bot_side_2]: images/botside2.jpg
 [bot_bottom]: images/bottom.png
 [bot_bottom_1]: images/bottom_1.png
 [bot_bottom_2]: images/bottom_2.png
 [bot_fitting]: images/bottom_fitting.png
+[bottop]: images/bottop.png
+[botmin]: images/botmin.png
 [pi_pins]: images/Pi-GPIO-Pinout-Diagram.png
 [dwm]: images/dwm.png
 [dwms]: images/dwms.png
 [camh7]: images/camh7.png
 [imu]: images/imu.png
+[converter]: images/converter.png
+[case]: images/case.png
+[cam]: images/cam.png
+[ardfront]: images/ardfront.png
+[ardside]: images/ardside.png
 [license-shield]: https://img.shields.io/badge/License-GPLv3-blue.svg
 [license-url]: https://github.com/lucastliu/sciencebot/LICENSE.txt
 [product-screenshot]: images/screenshot.png

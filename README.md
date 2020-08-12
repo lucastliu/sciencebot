@@ -10,7 +10,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/lucastliu/sciencebot">
-    <img src="images/bot34.jpg" alt="Logo" width="426" height="328">
+    <img src="images/bot34.png" alt="sciencebot" width="300" height="350">
   </a>
 
   <h3 align="center">sciencebot</h3>
@@ -131,13 +131,13 @@ See seperate [Hardware Documentation](https://github.com/lucastliu/sciencebot/bl
 
 #### OpenMV Cam H7 (Optional)
 
-  Not currently integrated in project, but has standalone functionality.
+  WIP. Not currently integrated in ROS movement, but has standalone functionality. Relevant files under `camera` folder.
 
   [OpenMV IDE](https://openmv.io/pages/download)
 
   [OpenMV Documentation](https://docs.openmv.io/)
 
-  Upload `camera_constants.py` and `main.py` (Files available in camera/h7 folder) to device using USB cable.
+  Upload `camera_constants.py` and `main.py` (Files available in camera/h7 folder) to device using micro USB cable. `main.py` is the script that will automatically run upon powering on the H7 cam. See `cam_example.py` for how to recieve data from the H7 Cam onto the Raspberry Pi (host device).
 
 #### Arduino
 
@@ -247,6 +247,7 @@ If you have chosen good parameters, the turtle will move to the desired setpoint
 
 Running of the sciencebot requires the relevant hardware components to be installed, as described in [HARDWARE](https://github.com/lucastliu/sciencebot/blob/master/HARDWARE.md)
 
+#### Automatic Waypoint Seeking
 Complete Spin up steps.
 
 Run the launch file
@@ -276,6 +277,21 @@ Desired X Y: 1.5 1.5
 ```
 
 The vehicle should begin moving to the waypoint in accordance with controller node policy.
+
+#### Manual Drive
+
+Follow these steps to manually drive the vehicle with a keyboard.
+TODO
+
+#### PlotJuggler
+
+PlotJuggler is an ROS package useful for collecting and visualizing data. It is capable of streaming [ROS2 topics](https://index.ros.org/doc/ros2/Tutorials/Topics/Understanding-ROS2-Topics/) in real time, which can be very helpful for observing and debugging the vehicle system, or any ROS2 system.
+
+See [PlotJuggler source repository](https://github.com/facontidavide/PlotJuggler) for more information. sciencebot provides a custom modified version of PlotJuggler designed to work on the Raspberry Pi 3B+ with ROS2 Eloquent.
+
+TODO: finish. mention differences.
+
+
 
 
 ## Tuning, Modifying, & Additions
