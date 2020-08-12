@@ -1,16 +1,17 @@
-# This example shows how to use the USB VCP class to send an image to PC on demand.
-# Host Code
-#
-#!/usr/bin/env python2.7
-import sys, serial, struct
+import sys
+import serial
+import struct
 import time
 
 
 class H7Camera():
+    """
+    OpenMV Cam H7 Host Device Side Camera Object
+
+    WIP
+    """
     def __init__(self, port_name="/dev/ttyACM1"):
-        #Exact port name may vary
         self.port_name = port_name
-        
         self.tag_present = 0
         self.x_offset = 0.0
         self.z = 999.9
@@ -19,36 +20,47 @@ class H7Camera():
         self.thread_test = 0
 
     def cam_mand(self, serialcmd):
-        
-        sp = serial.Serial(self.port_name, baudrate=115200, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE,
-                xonxoff=False, rtscts=False, stopbits=serial.STOPBITS_ONE, timeout=None, dsrdtr=True)
+
+        sp = serial.Serial(self.port_name,
+                           baudrate=115200,
+                           bytesize=serial.EIGHTBITS,
+                           parity=serial.PARITY_NONE,
+                           xonxoff=False, rtscts=False,
+                           stopbits=serial.STOPBITS_ONE,
+                           timeout=None,
+                           dsrdtr=True)
         try:
-            sp.setDTR(True) # dsrdtr is ignored on Windows.
+            sp.setDTR(True)  # dsrdtr is ignored on Windows.
             sp.write(serialcmd.encode())
             sp.flush()
             result = struct.unpack('<L', sp.read(4))[0]
             sp.close()
             return result
-        except:
-            print("Serial went wrong")
+
+        except Exception as ex:
+            print("Serial Communication Error")
             return -1
 
     def get_photo(self, name="img.jpg"):
-        serialcmd="snap"
-        sp = serial.Serial(self.port_name, baudrate=115200, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE,
-                xonxoff=False, rtscts=False, stopbits=serial.STOPBITS_ONE, timeout=None, dsrdtr=True)
-        sp.setDTR(True) # dsrdtr is ignored on Windows.
+        serialcmd = "snap"
+        sp = serial.Serial(self.port_name,
+                           baudrate=115200,
+                           bytesize=serial.EIGHTBITS,
+                           parity=serial.PARITY_NONE,
+                           xonxoff=False, rtscts=False,
+                           stopbits=serial.STOPBITS_ONE,
+                           timeout=None,
+                           dsrdtr=True)
+
+        sp.setDTR(True)  # dsrdtr is ignored on Windows.
         sp.write(serialcmd.encode())
         sp.flush()
         size = struct.unpack('<L', sp.read(4))[0]
         img = sp.read(size)
         sp.close()
-        
+
         with open(name, "wb") as f:
             f.write(img)
-
-
-# update calls used by eTaxi_Lucas
 
     def update_z(self):
         self.z = self.cam_mand("getz")
@@ -63,13 +75,13 @@ class H7Camera():
     def update_trust_reading(self):
         self.trust_reading = self.cam_mand("trst")
         return self.trust_reading
-    
+
     def update_test(self):
         self.test = self.cam_mand("test")
 
     def update_thread_test(self):
-        self.thread_test += 1 
-        
+        self.thread_test += 1
+
     def update(self):
         if self.update_tag_present():
             time.sleep(0.1)
@@ -81,10 +93,6 @@ class H7Camera():
             time.sleep(0.1)
         else:
             self.trust_reading = 0
-        # self.update_test()
-        # self.update_thread_test()
-        
-# get methods will be used by docking script
 
     def get_z(self):
         return self.cam_mand("getz")
@@ -100,24 +108,10 @@ class H7Camera():
 
     def get_test(self):
         return self.cam_mand("test")
-    
+
     def get_thread_test(self):
         return self.thread_test
 
 
-# v = H7Camera(port_name="/dev/ttyACM1")
-# v.get_photo()
-# print(v.get_tag_present())
-# print(v.get_x_offset())
-# while(True):
-#     print(v.get_x_offset())
-#  iii = 0
-# while iii < 10:
-#     v.update_test()
-#     print(v.get_test())
-#     v.update_z()
-#     print(v.get_z())
-#     v.update_x_offset()
-#     print(v.get_x_offset())
-#     iii += 1
+
 
