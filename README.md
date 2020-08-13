@@ -183,6 +183,7 @@ cd .../dev_ws/src
 colcon build --symlink-install
 ```
 
+This should build all sciencebot ROS2 packages.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
@@ -305,16 +306,158 @@ The vehicle should begin moving to the waypoint in accordance with controller no
 
 PlotJuggler is an ROS package useful for collecting and visualizing data. It is capable of streaming [ROS2 topics](https://index.ros.org/doc/ros2/Tutorials/Topics/Understanding-ROS2-Topics/) in real time, which can be very helpful for observing and debugging the vehicle system, or any ROS2 system.
 
-See [PlotJuggler source repository](https://github.com/facontidavide/PlotJuggler) for more information. sciencebot provides a custom modified version of PlotJuggler designed to work on the Raspberry Pi 3B+ with ROS2 Eloquent.
+sciencebot provides a custom modified version of PlotJuggler designed to work on the Raspberry Pi 3B+ with ROS2 Eloquent.
 
-TODO: finish. mention differences.
+PlotJuggler is installed like any other ROS2 Package. Plotjuggler also requires that plotjuggler_msgs has also been built.
+
+Complete spin up steps.
+
+Build the packages
+
+```sh
+cd .../dev_ws
+```
+
+```sh
+colcon build --packages-select plotjuggler_msgs
+```
+
+```sh
+colcon build --packages-select plotjuggler
+```
+
+After installation, Complete the Spin Up steps.
+
+Then run
+
+```sh
+ros2 run plotjuggler PlotJuggler
+```
+
+The PlotJuggler GUI should pop-up.
+
+Livestreaming ROS topic data can be achieved as follows:
+
+0. Start your ROS nodes (and ensure topics are being published to)
+1. Navigate in the top menu to **Streaming > Start ROS2 Topic Subscriber**
+2. Select desired topics and click **OK**
+3. Drag desired topics from sidebar onto plot.
+4. Information should begin streaming, as indicated at the bottom right **Streaming ON**
+5. Use the toolbar at the top right to adjust plot details, and add subplots
 
 
+See [PlotJuggler source repository](https://github.com/facontidavide/PlotJuggler) for further usage instructions and more information. 
 
 
 ## Tuning, Modifying, & Additions
 
+
+### Tune & MoveTo
+
+There are several prebuilt [ROS Actions](http://design.ros2.org/articles/actions.html)
+available within sciencebot, some for tuning parameters, some for running a prebuilt system.
+These actions are defined within the `custom_interfaces` package, under `dev_ws/src/custom_interfaces`.
+
+The `Tune` Action is defined as follows:
+
+```
+float64 x_dest
+float64 y_dest
+float64[3] linear
+float64[3] angular
+---
+float64 x_final
+float64 y_final
+---
+float64 x_curr
+float64 y_curr
+```
+
+This means that an action client must supply the first set of parameters: an X, Y destination, and 2 sets of PID parameters for an angular and linear [PID Controller](https://github.com/lucastliu/sciencebot/wiki/PID-Controller). The Action server is required to provide XY position updates, as well as a final XY position after execution. Thus, the Tune action is useful for determining parameters, as new weights can be given on each run.
+
+On the other hand, the `MoveTo` Action is defined as follows:
+
+```
+float64 x_dest
+float64 y_dest
+---
+float64 x_final
+float64 y_final
+---
+float64 x_curr
+float64 y_curr
+```
+
+While similar to `Tune`, it does not accept parameter weights. Using the `MoveTo` can be thought of as the production version of the action, where the weights have already been determined, and only goal seeking is perfomed.
+
+
+The `Heading` action is similar to `Tune`, except it is for seeking a goal heading rather than an XY. It is defined as follows:
+
+```
+float64 dest_angle
+float64[3] angular
+---
+float64 final
+---
+float64 curr
+```
+
+Use these actions, or create new ones, to either fine tune or run your sciencebot for various tasks.
+
+### ROS Nodes
+Adding a new node to the `nav` package is an easy way to extend the sciencebot ROS ecosystem. It is helpful to use existing nodes as a template.
+
+Navigate to the nav package, and move into the subfolder also named `nav`
+
+```sh
+cd .../dev_ws/src/nav/nav
+```
+lu
+Create your new python file, following ROS2 Node conventions.
+
+Return to the root of the `nav` package,
+
+```sh
+cd .../dev_ws/src/nav/
+```
+Modify `setup.py`, adding your new node into the list of `console_scripts`, following the convention `'NODE_NAME = nav.SUBPATH_TO_FILE:main'`
+
+Navigate to root of ROS workspace
+
+```sh
+cd .../dev_ws
+```
+
+rebuild the nav package
+
+```sh
+colcon build --packages-select nav
+```
+
+Now, after completing Spin up steps, you should be able to launch your new node in a terminal using
+
+```sh
+ros2 run nav NODE_NAME
+```
+
+
 ## Helpful Tips
+
+To build just a single ROS package, use the `--packages-select` flag
+
+Example:
+
+```sh
+colcon build --packages-select nav
+```
+
+ROS nodes can have their python components linked, so that changes in the script are automatically reflected in the next launch of the node (no rebuild needed). Use the `--symlink-install` flag when building. 
+
+Example:
+
+```sh
+colcon build --symlink-install nav
+```
 
 
 ## Resources
