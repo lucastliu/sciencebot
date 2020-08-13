@@ -45,8 +45,8 @@ class PositionPID(ControllerBase):
         self.get_logger().info('Executing Move To...')
         L = goal_handle.request.linear
         A = goal_handle.request.angular
-        self.angle_pid = PID(kp=A[0], ki=A[1], kd=A[2], imax=.3)  # Ex: 6 0 0
-        self.distance_pid = PID(kp=L[0], ki=L[1], kd=L[2], imax=.3)  # Ex: .1 .005 0
+        self.angle_pid = PID(kp=A[0], ki=A[1], kd=A[2])  # Ex: 6 0 0
+        self.distance_pid = PID(kp=L[0], ki=L[1], kd=L[2])  # Ex: .1 .005 0
         self.x_dest = goal_handle.request.x_dest
         self.y_dest = goal_handle.request.y_dest
         self.r = self.get_distance()

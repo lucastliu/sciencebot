@@ -41,7 +41,7 @@ class ImuPID(ControllerBase):
     def action_callback(self, goal_handle):
         self.get_logger().info('Executing Turn...')
         A = goal_handle.request.angular
-        self.angle_pid = PID(kp=A[0], ki=A[1], kd=A[2], imax=.3)
+        self.angle_pid = PID(kp=A[0], ki=A[1], kd=A[2], pmax=2.0)
         self.dest_angle = math.radians(goal_handle.request.dest_angle % 360)
         self.dest_angle = self.angle_convert(self.dest_angle)
         self.power = 0.0
@@ -49,7 +49,7 @@ class ImuPID(ControllerBase):
         # return x,y during each cycle
         # return final position
         feedback_msg = Heading.Feedback()
-        while abs(self.angle_diff) > math.pi / 30:
+        while abs(self.angle_diff) > math.pi / 45:
 
             # calculate
             self.angular_correction()
@@ -65,7 +65,7 @@ class ImuPID(ControllerBase):
             self.pid_publisher.publish(self.cpid)
 
             # give feedback
-            feedback_msg.curr = math.degrees(self.angle)
+            feedback_msg.curr = math.degrees(self.angle_diff)
             goal_handle.publish_feedback(feedback_msg)
 
         # stop motors
@@ -75,7 +75,7 @@ class ImuPID(ControllerBase):
         goal_handle.succeed()
 
         result = Heading.Result()
-        result.final = math.degrees(self.angle)
+        result.final = math.degrees(self.angle_diff)
         self.angle_diff = 2 * math.pi
         self.get_logger().info('Finished Turn')
 
@@ -92,6 +92,12 @@ class ImuPID(ControllerBase):
             self.power = -.8
 
         print("self diff: {0}".format(self.angle_diff))
+        
+    def steering_angle(self):
+        """
+        In this case, steering angle is simply goal angle
+        """
+        return self.dest_angle
 
     def move(self):
         print("Turn Power: {}".format(str(self.power)))

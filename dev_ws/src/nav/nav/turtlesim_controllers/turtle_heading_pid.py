@@ -34,7 +34,7 @@ class TurtleTurnPID(ControllerBase):
     def action_callback(self, goal_handle):
         self.get_logger().info('Executing Turn...')
         A = goal_handle.request.angular
-        self.angle_pid = PID(kp=A[0], ki=A[1], kd=A[2])
+        self.angle_pid = PID(kp=A[0], ki=A[1], kd=A[2], pmax=999, imax=999, dmax=999)
         self.dest_angle = math.radians(goal_handle.request.dest_angle % 360)
         self.dest_angle = self.angle_convert(self.dest_angle)
 
