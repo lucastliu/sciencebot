@@ -368,6 +368,8 @@ ros2 run plotjuggler PlotJuggler
 
 The PlotJuggler GUI should pop-up.
 
+![pg](images/plotjug.png)
+
 Livestreaming ROS topic data can be achieved as follows:
 
 0. Start your ROS nodes (and ensure topics are being published to)
@@ -381,7 +383,7 @@ Livestreaming ROS topic data can be achieved as follows:
 See [PlotJuggler source repository](https://github.com/facontidavide/PlotJuggler) for further usage instructions and more information. 
 
 
-## Tuning, Modifying, & Additions
+## Tuning & Modifying
 
 
 ### Tune & MoveTo
