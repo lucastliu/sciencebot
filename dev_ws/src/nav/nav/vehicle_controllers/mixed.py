@@ -20,7 +20,7 @@ class Mixed(ControllerBase):
     completely mixed angular and linear control
     """
     def __init__(self):
-        super().__init__('bang2', Pose, 'pose', MoveTo, 'move_to')
+        super().__init__('mixed', Pose, 'pose', MoveTo, 'move_to')
 
         self.sm = SerialMotor("/dev/ttyACM1")
 
@@ -32,7 +32,7 @@ class Mixed(ControllerBase):
         self.twist = Twist()
         self.T = 0.0
 
-        self.get_logger().info('BB Node Live')
+        self.get_logger().info('Mixed Controller Node Live')
 
     def pose_callback(self, pose):
         self.x = pose.x
@@ -70,8 +70,8 @@ class Mixed(ControllerBase):
             goal_handle.publish_feedback(feedback_msg)
 
         # stop motors
-        self.sm.set_motor(3, 0)  # right
-        self.sm.set_motor(4, 0)  # left
+        self.sm.set_motor(3, 0)
+        self.sm.set_motor(4, 0)
 
         # close out ROS action
         goal_handle.succeed()

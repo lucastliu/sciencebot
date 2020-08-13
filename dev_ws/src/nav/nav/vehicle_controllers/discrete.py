@@ -21,7 +21,7 @@ class Discrete(ControllerBase):
     """
 
     def __init__(self):
-        super().__init__('bang3', Pose, 'pose', MoveTo, 'move_to')
+        super().__init__('discrete', Pose, 'pose', MoveTo, 'move_to')
 
         self.sm = SerialMotor("/dev/ttyACM1")
 
@@ -34,7 +34,7 @@ class Discrete(ControllerBase):
         self.twist = Twist()
         self.T = 0.0
 
-        self.get_logger().info('BB Node Live')
+        self.get_logger().info('Discrete Controller Node Live')
 
     def pose_callback(self, pose):
         self.x = pose.x
