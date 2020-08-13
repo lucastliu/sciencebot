@@ -14,6 +14,7 @@ from turtlesim.msg import Pose
 
 from nav.pid import PID
 from nav.controller_base import ControllerBase
+from nav.motors.SerialMotor import SerialMotor
 
 
 class ImuPID(ControllerBase):
@@ -24,14 +25,11 @@ class ImuPID(ControllerBase):
     def __init__(self):
         super().__init__('imu_pid', Pose, 'pose', Heading, 'heading')
 
-        p = qos_profile_sensor_data
-        p.depth = 1
-        self.publisher = self.create_publisher(Twist, 'auto_vel', qos_profile_sensor_data)
         self.pid_publisher = self.create_publisher(Cpid, 'hpid', 1)
-
         self.dest_angle = 0.0
-        self.twist = Twist()
+        self.power = 0.0
         self.cpid = Cpid()
+        self.sm = SerialMotor("/dev/ttyACM1")
 
         self.get_logger().info('Heading PID Node Live')
 
@@ -43,14 +41,15 @@ class ImuPID(ControllerBase):
     def action_callback(self, goal_handle):
         self.get_logger().info('Executing Turn...')
         A = goal_handle.request.angular
-        self.angle_pid = PID(kp=A[0], ki=A[1], kd=A[2], imax=.3)  # .1 .005 0     .7 m/s movement       [.1 0 11 100 degree, one overshoot (max .9), depth=5]
+        self.angle_pid = PID(kp=A[0], ki=A[1], kd=A[2], imax=.3)
         self.dest_angle = math.radians(goal_handle.request.dest_angle % 360)
         self.dest_angle = self.angle_convert(self.dest_angle)
+        self.power = 0.0
 
         # return x,y during each cycle
         # return final position
         feedback_msg = Heading.Feedback()
-        while abs(self.angle_diff) > math.pi / 45:
+        while abs(self.angle_diff) > math.pi / 30:
 
             # calculate
             self.angular_correction()
@@ -59,8 +58,10 @@ class ImuPID(ControllerBase):
             self.cpid.intg = self.angle_pid.I
             self.cpid.derv = self.angle_pid.D
 
-            # publish velocity and PID updates
-            self.publisher.publish(self.twist)
+            # move
+            self.move()
+
+            # publish PID updates
             self.pid_publisher.publish(self.cpid)
 
             # give feedback
@@ -68,9 +69,8 @@ class ImuPID(ControllerBase):
             goal_handle.publish_feedback(feedback_msg)
 
         # stop motors
-        self.twist.linear.x = 0.0
-        self.twist.angular.z = 0.0
-        self.publisher.publish(self.twist)
+        self.sm.set_motor(3, 0)
+        self.sm.set_motor(4, 0)
 
         goal_handle.succeed()
 
@@ -83,9 +83,21 @@ class ImuPID(ControllerBase):
 
     def angular_correction(self):
         self.calculate_closest_turn()
-        pid_angle = self.angle_pid.update(self.angle_diff)
+        self.power = self.angle_pid.update(self.angle_diff)
+
+        if self.power > .8:
+            self.power = .8
+
+        if self.power < -.8:
+            self.power = -.8
+
         print("self diff: {0}".format(self.angle_diff))
-        self.twist.angular.z = pid_angle
+
+    def move(self):
+        print("Turn Power: {}".format(str(self.power)))
+        self.sm.set_motor(3, -1*self.power)  # left
+        self.sm.set_motor(4, self.power)  # right
+        time.sleep(.05)
 
 
 def main(args=None):
