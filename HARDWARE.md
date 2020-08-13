@@ -189,7 +189,6 @@ During ROS operation, poorly formed code / nodes may cause ungraceful shutdown, 
 
 If the motors seem to continually spin (likely from the last motor command before communication failure), after power cycling, modify the `motor_test.py` script to set both motors to zero, and run the script to stop the motors.
 
-
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [bot34]: images/bot34.png

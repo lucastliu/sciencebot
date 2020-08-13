@@ -270,7 +270,7 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard
 
 Begin driving. See [teleop twist keyboard](https://github.com/lucastliu/sciencebot/tree/master/dev_ws/src/teleop_twist_keyboard) for additional drive details.
 
-#### Automatic Waypoint Seeking
+#### Automatic XY Waypoint Seeking
 Complete Spin up steps.
 
 Run the launch file
@@ -301,8 +301,40 @@ Desired X Y: 1.5 1.5
 
 The vehicle should begin moving to the waypoint in accordance with controller node policy.
 
+#### Heading Seeking
+Complete Spin up steps.
 
-#### PlotJuggler
+Run the launch file
+
+```sh
+ros2 launch nav pose.launch.py
+```
+If sensors are correctly hooked up, the terminal should begin displaying heading updates.
+
+Open a new terminal, and complete the spin up steps.
+
+Run the vehicle heading controller node of your choice, i.e.
+```sh
+ros2 run nav imupid
+```
+
+Open a new terminal, complete the spin up steps.
+
+Run the request client script
+
+```sh
+ python3 ./src/nav/nav/clients/heading_pid_client.py 
+```
+input your desired heading angle, and parameters
+
+```sh
+Desired Angle (Degrees): 200
+Enter Angular PID Constants : .5 .25 .0008
+```
+
+The vehicle should begin turning to the setpoint in accordance with controller node policy.
+
+### PlotJuggler
 
 PlotJuggler is an ROS package useful for collecting and visualizing data. It is capable of streaming [ROS2 topics](https://index.ros.org/doc/ros2/Tutorials/Topics/Understanding-ROS2-Topics/) in real time, which can be very helpful for observing and debugging the vehicle system, or any ROS2 system.
 
