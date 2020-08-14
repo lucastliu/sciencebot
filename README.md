@@ -23,6 +23,8 @@
     <a href="https://github.com/lucastliu/sciencebot/blob/master/HARDWARE.md">Hardware</a>
     ·
     <a href="https://github.com/lucastliu/sciencebot/issues">Request Feature</a>
+    <br />
+    <a href="https://github.com/lucastliu/sciencebot/wiki/System-Capabilities"><b>See sciencebot in action » </b></a>
   </p>
 </p>
 
@@ -32,9 +34,7 @@ Software documentation for setting up the sciencebot, ROS2, and turtlesim.
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
 
-- [Table of Contents](#table-of-contents)
-- [About The Project](#about-the-project)
-- [Software Technologies](#software-technologies)
+- [Technologies](#technologies)
 - [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
@@ -50,7 +50,13 @@ Software documentation for setting up the sciencebot, ROS2, and turtlesim.
   * [turtlesim basic](#turtlesim-basic)
   * [turtlesim PID control](#turtlesim-pid-control)
   * [sciencebot](#sciencebot)
-- [Tuning, Modifying, & Additions](#tuning--modifying----additions)
+    + [Manual Drive](#manual-drive)
+    + [Automatic XY Waypoint Seeking](#automatic-xy-waypoint-seeking)
+    + [Heading Seeking](#heading-seeking)
+  * [PlotJuggler](#plotjuggler)
+- [Tuning & Modifying](#tuning---modifying)
+  * [Tune & MoveTo](#tune---moveto)
+  * [ROS Nodes](#ros-nodes)
 - [Helpful Tips](#helpful-tips)
 - [Resources](#resources)
 - [Future](#future)
@@ -553,11 +559,7 @@ This repository includes modified versions of other source code from the ROS ope
 <!-- CONTACT -->
 ## Contact
 
-Your Name  - lucas.liu@duke.edu
-
-Project Link: [https://github.com/lucastliu/sciencebot](https://github.com/lucastliu/sciencebot)
-
-
+Lucas Liu  - lucas.liu AT duke.edu
 
 
 <!-- MARKDOWN LINKS & IMAGES -->

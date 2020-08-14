@@ -22,6 +22,9 @@
     <a href="https://github.com/lucastliu/sciencebot/blob/master/README.md">Software</a>
     ·
     <a href="https://github.com/lucastliu/sciencebot/issues">Request Feature</a>
+    <br />
+    <a href="https://github.com/lucastliu/sciencebot/wiki/System-Capabilities"><b>See sciencebot in action » </b></a>
+
   </p>
 </p>
 
@@ -33,20 +36,21 @@ Guide for physical vehicle construction, as well as sensor information.
 
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
-- [Table of Contents](#table-of-contents)
 - [Hardware Technologies](#hardware-technologies)
-- [Images](#images)
+- [Overview Shots](#overview-shots)
 - [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
-    + [Raspberry Pi](#raspberry-pi)
+    + [Base Chassis, Mounts & Wheels](#base-chassis--mounts---wheels)
     + [Wheels](#wheels)
+    + [Raspberry Pi](#raspberry-pi)
     + [Arduino Motor Microcontroller](#arduino-motor-microcontroller)
     + [BNO055 IMU](#bno055-imu)
     + [DWM1001](#dwm1001)
-    + [OpenMV Cam H7 (Optional)](#openmv-cam-h7--optional-)
+    + [OpenMV Cam H7](#openmv-cam-h7)
 - [Testing & Troubleshooting](#testing---troubleshooting)
-
+- [License](#license)
+- [Contact](#contact)
 
 ## Hardware Technologies
 * [Raspberry Pi 3B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/)
@@ -118,6 +122,7 @@ Alternatively, one can power the Pi through the 18650s by wiring the 12V battery
 #### Arduino Motor Microcontroller
 
 Our Arduino Uno will serve as the motor microcontroller. Attatch the motor shield to the Arduino, and wire the motors to the shield. using the USB A/B Cable, connect the Arduino to the Raspberry Pi.
+
 ![ardfront][ardfront]
 
 The Pi and Arduino are vertically mounted on the base
@@ -132,7 +137,9 @@ Test the motors by running `motor_test.py` (located under motors folder) on the 
 ![botmin][botmin]
 
 #### BNO055 IMU
+
 ![imu][imu]
+
 1. Connect the Power, Ground, SCL, and SDA pins to the correct pinouts on the Pi. [Sensor Pinouts](https://learn.adafruit.com/adafruit-bno055-absolute-orientation-sensor/pinouts)
 
 2. Enable I2C on your Pi **(Pi > Preferences > Raspberry Pi Configuration > Interfaces)**
@@ -188,6 +195,33 @@ to see devices and respective ports. For instance, the Arduino may come up under
 During ROS operation, poorly formed code / nodes may cause ungraceful shutdown, and cause the vehicle to behave undesirably. Power cycling both the Pi and the Arduino will give you a fresh start. 
 
 If the motors seem to continually spin (likely from the last motor command before communication failure), after power cycling, modify the `motor_test.py` script to set both motors to zero, and run the script to stop the motors.
+
+<!-- LICENSE -->
+## License
+
+    Copyright © 2020 Lucas Liu
+
+    sciencebot
+
+    sciencebot is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    sciencebot is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with sciencebot.  If not, see <https://www.gnu.org/licenses/>.
+
+This repository includes modified versions of other source code from the ROS open source community. The relevant subfolders each have their own license. All other files fall under the GPLv3 license as described above.
+
+<!-- CONTACT -->
+## Contact
+
+Lucas Liu  - lucas.liu AT duke.edu
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
